@@ -8,8 +8,9 @@ ENV LANG C.UTF-8
 RUN python3 -m pip install pyserial
 RUN python3 -m pip install paho-mqtt
 
-COPY . /srv
-RUN chmod a+x /srv/run_addon.sh
+COPY run.sh /
+COPY run.py /
+RUN chmod a+x /run.sh
 
 WORKDIR /share
 
