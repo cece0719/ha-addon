@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 class SDSSerial:
     def __init__(self):
         self._ser = serial.Serial()
-        self._ser.port = Options["serial"]["port"]
-        self._ser.baudrate = Options["serial"]["baudrate"]
-        self._ser.bytesize = Options["serial"]["bytesize"]
-        self._ser.parity = Options["serial"]["parity"]
-        self._ser.stopbits = Options["serial"]["stopbits"]
+        self._ser.port = "/dev/ttyUSB0"
+        self._ser.baudrate = "9600"
+        self._ser.bytesize = "8"
+        self._ser.parity = "N"
+        self._ser.stopbits = "1"
 
         self._ser.close()
         self._ser.open()
@@ -66,54 +66,6 @@ def init_logger():
     logger.addHandler(handler)
 
 
-def init_logger_file():
-    if Options["log"]["to_file"]:
-        filename = Options["log"]["filename"]
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-
-        formatter = logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-        handler = RotatingFileHandler(os.path.abspath(Options["log"]["filename"]), mode='a', backupCount=100)
-        handler.setFormatter(formatter)
-        handler.suffix = '%Y%m%d'
-        logger.addHandler(handler)
-        handler.doRollover()
-
-
-def init_option(argv):
-    # option 파일 선택
-    if len(argv) == 1:
-        option_file = "./options_standalone.json"
-    else:
-        option_file = argv[1]
-
-    # configuration이 예전 버전이어도 최대한 동작 가능하도록,
-    # 기본값에 해당하는 파일을 먼저 읽고나서 설정 파일로 업데이트 한다.
-    global Options
-
-    # 기본값 파일은 .py 와 같은 경로에 있음
-    default_file = os.path.join(os.path.dirname(os.path.abspath(argv[0])), "config.json")
-
-    with open(default_file) as f:
-        config = json.load(f)
-        logger.info("addon version {}".format(config["version"]))
-        Options = config["options"]
-    with open(option_file) as f:
-        Options2 = json.load(f)
-
-    # 업데이트
-    for k, v in Options.items():
-        if type(v) is dict and k in Options2:
-            Options[k].update(Options2[k])
-            for k2 in Options[k].keys():
-                if k2 not in Options2[k].keys():
-                    logger.warning("no configuration value for '{}:{}'! try default value ({})...".format(k, k2, Options[k][k2]))
-        else:
-            if k not in Options2:
-                logger.warning("no configuration value for '{}'! try default value ({})...".format(k, Options[k]))
-            else:
-                Options[k] = Options2[k]
-
-
 def dump_loop():
     conn.set_timeout(0.0)
     logs = []
@@ -147,8 +99,6 @@ if __name__ == "__main__":
 
     # configuration 로드 및 로거 설정
     init_logger()
-    init_option(sys.argv)
-    init_logger_file()
 
     logger.info("initialize serial...")
     conn = SDSSerial()
