@@ -1,21 +1,16 @@
-#ARG BUILD_FROM="alpine:latest"
-#ARG BUILD_FROM
-#FROM $BUILD_FROM
-FROM node:latest
+FROM python:3
 
 ENV LANG C.UTF-8
 
-# Copy data for add-on
-COPY run.sh /
-COPY js /js
-#
-## Install requirements for add-on
-RUN npm init -f && \
-    npm install mqtt && \
-    npm install serialport --build-from-source=serialport
+#RUN apk add --no-cache python3
+#RUN apk add --no-cache py3-pip
+
+RUN python3 -m pip install pyserial
+RUN python3 -m pip install paho-mqtt
+
+COPY . /srv
+RUN chmod a+x /srv/run_addon.sh
 
 WORKDIR /share
-
-RUN chmod a+x /run.sh
 
 CMD [ "/run.sh" ]

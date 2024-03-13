@@ -1,5 +1,7 @@
 #!/bin/sh
-echo start
-node /share/index.js
 
-#while true; do echo "still live"; sleep 1800; done
+ADDON_FILE=run.py
+
+echo "[Info] run $ADDON_FILE ..."
+python3 /srv/$ADDON_FILE "/data/options.json"
+echo "[Info] unexpected exit!"
