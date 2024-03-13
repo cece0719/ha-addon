@@ -16,10 +16,10 @@ class SDSSerial:
     def __init__(self):
         self._ser = serial.Serial()
         self._ser.port = "/dev/ttyUSB0"
-        self._ser.baudrate = "9600"
-        self._ser.bytesize = "8"
+        self._ser.baudrate = 9600
+        self._ser.bytesize = 8
         self._ser.parity = "N"
-        self._ser.stopbits = "1"
+        self._ser.stopbits = 1
 
         self._ser.close()
         self._ser.open()
@@ -87,7 +87,7 @@ def dump_loop():
                 #               else:           logs.append(",  {:02X}".format(b))
                 logs.append(" {:02X}".format(b))
             logger.info("".join(logs))
-        sleep(0.01)
+        time.sleep(0.01)
 
     logger.info("".join(logs))
     logger.warning("dump done.")
