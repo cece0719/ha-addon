@@ -1,3 +1,5 @@
-#!/usr/bin/with-contenv bashio
+#!/bin/sh
+echo start
+node /share/index.js
 
-echo "Hello world!"
+#while true; do echo "still live"; sleep 1800; done
