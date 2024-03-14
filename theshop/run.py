@@ -83,6 +83,7 @@ def dump_loop():
             for b in data:
                 logs.append(" {:02X}".format(b))
             logger.info("".join(logs))
+        time.sleep(0.01)
 
 
 if __name__ == "__main__":
