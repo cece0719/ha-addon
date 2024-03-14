@@ -62,6 +62,7 @@ class TheShopMQTT:
         self.is_connect = True
 
         topic = "homeassistant/light_1/sds_wallpad/light1/config"
+        self.mqtt.subscribe("homeassistant", 0)
         self.mqtt.publish(topic, json.dumps({
             "_intg": "light",
             "~": "1/light",
