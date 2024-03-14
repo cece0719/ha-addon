@@ -36,8 +36,6 @@ class KSX4506_Serial:
         self._ser.timeout = None
 
     def readRaw(self):
-        dd = bytes(3)
-
         while True:
             header = self.read(1)
             if header == b'\xf7':
