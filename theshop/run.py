@@ -36,11 +36,16 @@ class KSX4506_Serial:
         self._ser.timeout = None
 
     def readRaw(self):
+        dd = bytes(3)
+
         while True:
             header = self.read(1)
             if header == b'\xf7':
                 break
-            logger.info("header is not f7 try again : " + " {:02X}".format(header))
+            logs = []
+            for b in header:
+                logs.append(" {:02X}".format(b))
+            logger.info("header is not f7 try again : " + "".join(logs))
         deviceId = self.read(1)
         deviceSubId = self.read(1)
         commandType = self.read(1)
