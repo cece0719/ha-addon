@@ -71,12 +71,9 @@ class TheShopMQTT:
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
         self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_disconnect(mqtt, userdata, msg))
+        self.mqtt.connect("localhost")
+        self.mqtt.loop_start()
 
-        mqtt.connect("localhost")
-
-        mqtt.loop_start()
-
-        delay = 1
         while not self.is_connect:
             logger.info("waiting MQTT connected ...")
             time.sleep(0.01)
