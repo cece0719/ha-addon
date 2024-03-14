@@ -65,7 +65,8 @@ class KSX4506_Serial:
             inWating = self._ser.in_waiting
             if inWating >= count:
                 return self._ser.read(count)
-            time.sleep(0.1)
+            logger.info("inWaing not eno : " + inWating)
+            time.sleep(0.01)
 
     def send(self, a):
         self._ser.write(a)
@@ -81,7 +82,6 @@ def init_logger():
 
 def dump_loop():
     logger.info("dump start")
-    logs = []
     while True:
         data = conn.readRaw()
 
