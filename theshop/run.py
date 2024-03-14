@@ -24,6 +24,15 @@ class KSX4506_Serial:
         self._ser.close()
         self._ser.open()
 
+        self._ser.timeout = 0.0
+
+        while True:
+            data=self._ser.read(1)
+            if data:
+                continue
+            else:
+                break
+
         self._ser.timeout = None
 
     def recvRaw(self):
