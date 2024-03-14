@@ -19,7 +19,7 @@ def bytes_xor(bytes):
 
 
 def bytes_sum(bytes):
-    return reduce(lambda acc, cur: (acc + cur) & 256, bytes).to_bytes(1)
+    return reduce(lambda acc, cur: (acc + cur) & 256, bytes, 0).to_bytes(1)
 
 
 class KSX4506_Serial:
