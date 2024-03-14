@@ -88,6 +88,7 @@ class TheShopMQTT:
         logger.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
+            "unique_id": "button_2_2",
             "command_topic": "{}/button_2/command".format(self.mqtt_prefix),
             "device": {
                 "ids": ["sds_wallpad",],
