@@ -82,6 +82,7 @@ class TheShopMQTT:
 
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
+            "uniq_id": "button_2",
             "command_topic": "{}/button_2/command".format(self.mqtt_prefix)
         }))
 
