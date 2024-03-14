@@ -39,17 +39,18 @@ class KSX4506_Serial:
         data = self._ser.read(int.from_bytes(length, "little"))
         xorSum = self._ser.read(1)
         addSum = self._ser.read(1)
-        logs=[]
-        logs.append(header)
-        logs.append(deviceId)
-        logs.append(deviceSubId)
-        logs.append(commandType)
-        logs.append(length)
-        # logs.append(data)
 
-        logs.append(xorSum)
-        logs.append(addSum)
-        return logs
+        bytes = bytes()
+        bytes += header
+        bytes += deviceId
+        bytes += deviceSubId
+        bytes += commandType
+        bytes += length
+        bytes += data
+        bytes += xorSum
+        bytes += addSum
+
+        return bytes
 
     def send(self, a):
         self._ser.write(a)
