@@ -35,19 +35,19 @@ class KSX4506_Serial:
 
         self._ser.timeout = None
 
-    def recvRaw(self):
+    def readRaw(self):
         while True:
-            header = self._ser.read(1)
+            header = self.read(1)
             if header == b'\xf7':
                 break
             logger.info("header is not f7 try again")
-        deviceId = self._ser.read(1)
-        deviceSubId = self._ser.read(1)
-        commandType = self._ser.read(1)
-        length = self._ser.read(1)
-        data = self._ser.read(int.from_bytes(length, "little"))
-        xorSum = self._ser.read(1)
-        addSum = self._ser.read(1)
+        deviceId = self.read(1)
+        deviceSubId = self.read(1)
+        commandType = self.read(1)
+        length = self.read(1)
+        data = self.read(int.from_bytes(length, "little"))
+        xorSum = self.read(1)
+        addSum = self.read(1)
 
         bytes = header
         bytes += deviceId
@@ -59,6 +59,13 @@ class KSX4506_Serial:
         bytes += addSum
 
         return bytes
+
+    def read(self, count = 1):
+        inWating = self._ser.in_waiting
+        while True:
+            if inWating >= count:
+                return self._ser.read(count)
+            time.sleep(0.1)
 
     def send(self, a):
         self._ser.write(a)
