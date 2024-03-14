@@ -14,16 +14,15 @@ logger = logging.getLogger(__name__)
 
 class KSX4506_Serial:
     def __init__(self):
+        self.in_waiting=0
         self._ser = serial.Serial()
         self._ser.port = "/dev/ttyUSB0"
         self._ser.baudrate = 9600
         self._ser.bytesize = 8
         self._ser.parity = "N"
         self._ser.stopbits = 1
-
         self._ser.close()
         self._ser.open()
-
         self._ser.timeout = 0.0
 
         while True:
@@ -64,12 +63,12 @@ class KSX4506_Serial:
         return bytes
 
     def read(self, count=1):
-        while True:
-            inWating = self._ser.in_waiting
-            if inWating >= count:
-                return self._ser.read(count)
-            logger.info("inWaing not eno : " + str(inWating) + ", count : " + str(count))
+        while self.in_waiting < count:
+            logger.info("inWaing not eno : " + str(self.in_waiting) + ", count : " + str(count))
             time.sleep(0.01)
+            self.in_waiting += self._ser.in_waiting
+
+        return self._ser.read(count)
 
     def send(self, a):
         self._ser.write(a)
