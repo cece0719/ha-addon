@@ -53,11 +53,14 @@ class KSX4506_Serial:
             logger.info(data.hex(" "))
 
 
+mqtt = paho_mqtt.Client()
+
+
 class TheShopMQTT:
     def __init__(self):
         logger.info("try mqtt init")
         self.is_connect = False
-        self.mqtt = paho_mqtt.Client()
+        self.mqtt = mqtt
         logger.info("complete mqtt setup")
 
     def on_connect(self, mqtt, userdata, flags, rc):
