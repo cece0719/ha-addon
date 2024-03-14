@@ -45,7 +45,8 @@ class KSX4506_Serial:
         logs.append(deviceSubId)
         logs.append(commandType)
         logs.append(length)
-        logs.append(data)
+        # logs.append(data)
+
         logs.append(xorSum)
         logs.append(addSum)
         return logs
