@@ -60,9 +60,9 @@ class KSX4506_Serial:
 
         return bytes
 
-    def read(self, count = 1):
-        inWating = self._ser.in_waiting
+    def read(self, count=1):
         while True:
+            inWating = self._ser.in_waiting
             if inWating >= count:
                 return self._ser.read(count)
             time.sleep(0.1)
