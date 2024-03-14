@@ -14,15 +14,16 @@ logger = logging.getLogger(__name__)
 
 class KSX4506_Serial:
     def __init__(self):
-        self.in_waiting=0
         self._ser = serial.Serial()
         self._ser.port = "/dev/ttyUSB0"
         self._ser.baudrate = 9600
         self._ser.bytesize = 8
         self._ser.parity = "N"
         self._ser.stopbits = 1
+
         self._ser.close()
         self._ser.open()
+
         self._ser.timeout = 0.0
 
         while True:
@@ -39,17 +40,15 @@ class KSX4506_Serial:
             header = self.read(1)
             if header == b'\xf7':
                 break
-            logs = []
-            for b in header:
-                logs.append(" {:02X}".format(b))
-            logger.info("header is not f7 try again : " + "".join(logs))
-        deviceId = self.read(1)
-        deviceSubId = self.read(1)
-        commandType = self.read(1)
-        length = self.read(1)
-        data = self.read(int.from_bytes(length, "little"))
-        xorSum = self.read(1)
-        addSum = self.read(1)
+            logger.info("header is not f7 try again : " + " {:02X}".format(header))
+
+        deviceId = self._ser.read(1)
+        deviceSubId = self._ser.read(1)
+        commandType = self._ser.read(1)
+        length = self._ser.read(1)
+        data = self._ser.read(int.from_bytes(length, "little"))
+        xorSum = self._ser.read(1)
+        addSum = self._ser.read(1)
 
         bytes = header
         bytes += deviceId
@@ -61,14 +60,6 @@ class KSX4506_Serial:
         bytes += addSum
 
         return bytes
-
-    def read(self, count=1):
-        while self.in_waiting < count:
-            logger.info("inWaing not eno : " + str(self.in_waiting) + ", count : " + str(count))
-            time.sleep(0.01)
-            self.in_waiting += self._ser.in_waiting
-
-        return self._ser.read(count)
 
     def send(self, a):
         self._ser.write(a)
@@ -92,7 +83,6 @@ def dump_loop():
             for b in data:
                 logs.append(" {:02X}".format(b))
             logger.info("".join(logs))
-        time.sleep(0.01)
 
 
 if __name__ == "__main__":
