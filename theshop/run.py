@@ -83,7 +83,7 @@ class TheShopMQTT:
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
 
-        topic = "homeassistant/button/test/button_2/config"
+        topic = "homeassistant/button/sds_wallpad/button_2/config"
 
         logger.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
