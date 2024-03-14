@@ -1,3 +1,5 @@
+from functools import reduce
+
 import serial
 import paho.mqtt.client as paho_mqtt
 import json
@@ -54,22 +56,23 @@ class KSX4506_Serial:
 
 
 class TheShopMQTT:
-    def __init__(self):
+    def __init__(self, ksx4506_serial):
+        self.serial = ksx4506_serial
+        self.mqtt_prefix = "cece0719"
         self.is_connect = False
         self.mqtt = paho_mqtt.Client()
 
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
 
-        topic = "homeassistant/button/test/button1/config"
-        logger.info("mqtt subscribe!")
-        self.mqtt.subscribe("#", 0)
-        logger.info("mqtt publish!")
+        topic = "homeassistant/button/test/button_elevator/config"
+
+        self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
-            "unique_id": "button_1",
-            "name": "button_1_1",
-            "command_topic": "cece0719/button1/command"
+            "command_topic": "{}/button_elevator/command".format(self.mqtt_prefix)
         }))
+
+
         logger.info("mqtt on connect success")
 
     def on_disconnect(self, mqtt, userdata, rc):
@@ -79,6 +82,11 @@ class TheShopMQTT:
     def on_message(self, mqtt, userdata, msg):
         logger.info("get messaged {}".format(msg.topic))
         logger.info("get payload {}".format(msg.payload.decode()))
+        if msg.topic == "{}/button_elevator/command".format(self.mqtt_prefix):
+            dd = b'\xf7\x33\x01\x81\x03\x00\x20\x00'
+            dd += reduce(lambda acc, cur: acc ^ cur, dd, 0).to_bytes(1)
+            dd += reduce(lambda acc, cur: (acc + cur) & 256, dd).to_bytes(1)
+            self.serial.send(dd)
 
     def start(self):
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
@@ -113,7 +121,7 @@ def dump_loop(ksx4506_serial):
 if __name__ == "__main__":
     init_logger()
     logger.info("initialize serial...")
-    mqtt = TheShopMQTT()
-    mqtt.start()
     serial = KSX4506_Serial()
+    mqtt = TheShopMQTT(serial)
+    mqtt.start()
     serial.start()
