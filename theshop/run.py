@@ -88,8 +88,14 @@ class TheShopMQTT:
         logger.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
-            "uniq_id": "button_2",
-            "command_topic": "{}/button_2/command".format(self.mqtt_prefix)
+            "command_topic": "{}/button_2/command".format(self.mqtt_prefix),
+            "device": {
+                "ids": ["sds_wallpad",],
+                "name": "sds_wallpad",
+                "mf": "Samsung SDS",
+                "mdl": "Samsung SDS Wallpad",
+                "sw": "n-andflash/ha_addons/sds_wallpad",
+            }
         }))
 
 
