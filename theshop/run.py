@@ -40,8 +40,7 @@ class KSX4506_Serial:
         xorSum = self._ser.read(1)
         addSum = self._ser.read(1)
 
-        bytes = bytes()
-        bytes += header
+        bytes = header
         bytes += deviceId
         bytes += deviceSubId
         bytes += commandType
