@@ -24,45 +24,36 @@ class KSX4506_Serial:
         self._ser.close()
         self._ser.open()
 
-        self._ser.timeout = 0.0
-
-        while True:
-            data=self._ser.read(1)
-            if data:
-                continue
-            else:
-                break
-
         self._ser.timeout = None
 
-    def readRaw(self):
+        self._ser.reset_input_buffer()
+        self._ser.reset_output_buffer()
+
+    def read_raw(self):
         while True:
             header = self._ser.read(1)
             if header == b'\xf7':
                 break
-            logs = []
-            for b in header:
-                logs.append(" {:02X}".format(b))
-            logger.info("header is not f7 try again : " + "".join(logs))
+            logger.info("header is not f7 try again : " + str(header.hex()))
 
-        deviceId = self._ser.read(1)
-        deviceSubId = self._ser.read(1)
-        commandType = self._ser.read(1)
+        device_id = self._ser.read(1)
+        device_sub_id = self._ser.read(1)
+        command_type = self._ser.read(1)
         length = self._ser.read(1)
-        data = self._ser.read(int.from_bytes(length, "little"))
-        xorSum = self._ser.read(1)
-        addSum = self._ser.read(1)
+        data = self._ser.read(int.from_bytes(length))
+        xor_sum = self._ser.read(1)
+        add_sum = self._ser.read(1)
 
-        bytes = header
-        bytes += deviceId
-        bytes += deviceSubId
-        bytes += commandType
-        bytes += length
-        bytes += data
-        bytes += xorSum
-        bytes += addSum
+        data_bytes = header
+        data_bytes += device_id
+        data_bytes += device_sub_id
+        data_bytes += command_type
+        data_bytes += length
+        data_bytes += data
+        data_bytes += xor_sum
+        data_bytes += add_sum
 
-        return bytes
+        return data_bytes
 
     def send(self, a):
         self._ser.write(a)
@@ -76,25 +67,14 @@ def init_logger():
     logger.addHandler(handler)
 
 
-def dump_loop():
+def dump_loop(ksx4506_serial):
     logger.info("dump start")
     while True:
-        data = conn.readRaw()
-
-        if data:
-            logs = []
-            for b in data:
-                logs.append(" {:02X}".format(b))
-            logger.info("".join(logs))
+        data = ksx4506_serial.read_raw()
+        logger.info(data.hex(" "))
 
 
 if __name__ == "__main__":
-    global conn
-
-    # configuration 로드 및 로거 설정
     init_logger()
-
     logger.info("initialize serial...")
-    conn = KSX4506_Serial()
-
-    dump_loop()
+    dump_loop(KSX4506_Serial())
