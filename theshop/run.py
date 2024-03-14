@@ -32,7 +32,7 @@ class KSX4506_Serial:
         deviceSubId = self._ser.read(1)
         commandType = self._ser.read(1)
         length = self._ser.read(1)
-        data = self._ser.read(length)
+        data = self._ser.read(int.from_bytes(length), "little")
         xorSum = self._ser.read(1)
         addSum = self._ser.read(1)
         logs=[]
