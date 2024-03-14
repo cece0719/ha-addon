@@ -83,7 +83,7 @@ def dump_loop():
     logger.info("dump start")
     logs = []
     while True:
-        data = conn.recvRaw()
+        data = conn.readRaw()
 
         if data:
             logs = []
