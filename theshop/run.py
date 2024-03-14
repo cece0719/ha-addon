@@ -20,11 +20,10 @@ class KSX4506_Serial:
         self._ser.bytesize = 8
         self._ser.parity = "N"
         self._ser.stopbits = 1
+        self._ser.timeout = None
 
         self._ser.close()
         self._ser.open()
-
-        self._ser.timeout = None
 
         self._ser.reset_input_buffer()
         self._ser.reset_output_buffer()
@@ -44,19 +43,15 @@ class KSX4506_Serial:
         xor_sum = self._ser.read(1)
         add_sum = self._ser.read(1)
 
-        data_bytes = header
-        data_bytes += device_id
-        data_bytes += device_sub_id
-        data_bytes += command_type
-        data_bytes += length
-        data_bytes += data
-        data_bytes += xor_sum
-        data_bytes += add_sum
-
-        return data_bytes
+        return header+device_id+device_sub_id+command_type+length+data+xor_sum+add_sum
 
     def send(self, a):
         self._ser.write(a)
+
+    def start(self):
+        while True:
+            data = self.read_raw()
+            logger.info(data.hex(" "))
 
 
 def init_logger():
@@ -77,4 +72,5 @@ def dump_loop(ksx4506_serial):
 if __name__ == "__main__":
     init_logger()
     logger.info("initialize serial...")
-    dump_loop(KSX4506_Serial())
+    serial = KSX4506_Serial()
+    serial.start()
