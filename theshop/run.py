@@ -31,7 +31,7 @@ class KSX4506_Serial:
             header = self._ser.read(1)
             if header == b'\xf7':
                 break
-            logger.info("header is not f7 try again")
+            logger.info("header is not f7 try again : " + header)
         deviceId = self._ser.read(1)
         deviceSubId = self._ser.read(1)
         commandType = self._ser.read(1)
@@ -72,7 +72,6 @@ def dump_loop():
         if data:
             logs = []
             for b in data:
-                logger.info(b)
                 logs.append(" {:02X}".format(b))
             logger.info("".join(logs))
 
