@@ -72,6 +72,7 @@ def dump_loop():
         if data:
             logs = []
             for b in data:
+                logger.info(b)
                 logs.append(" {:02X}".format(b))
             logger.info("".join(logs))
 
