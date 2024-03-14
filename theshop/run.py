@@ -55,8 +55,10 @@ class KSX4506_Serial:
 
 class TheShopMQTT:
     def __init__(self):
-        self.mqtt = paho_mqtt.Client()
+        logger.info("try mqtt init")
         self.is_connect = False
+        self.mqtt = paho_mqtt.Client()
+        logger.info("complete mqtt setup")
 
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
@@ -68,9 +70,13 @@ class TheShopMQTT:
         logger.info("get messaged")
 
     def start(self):
+        logger.info("mqtt start 1")
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
+        logger.info("mqtt start 2")
         self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
+        logger.info("mqtt start 3")
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_disconnect(mqtt, userdata, msg))
+        logger.info("mqtt start 4")
         self.mqtt.connect("localhost")
         self.mqtt.loop_start()
 
