@@ -63,12 +63,12 @@ class TheShopMQTT:
 
         topic = "homeassistant/button/test/button1/config"
         logger.info("mqtt subscribe!")
-        self.mqtt.subscribe("homeassistant", 0)
+        self.mqtt.subscribe("cece0719", 0)
         logger.info("mqtt publish!")
         self.mqtt.publish(topic, json.dumps({
             "unique_id": "button_1",
             "name": "button_1_1",
-            "command_topic": "button1/command"
+            "command_topic": "cece0719/button1/command"
         }))
         logger.info("mqtt on connect success")
 
