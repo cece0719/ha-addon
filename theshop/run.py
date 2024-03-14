@@ -1,16 +1,16 @@
 import serial
-# import paho.mqtt.client as paho_mqtt
+import paho.mqtt.client as paho_mqtt
 # import json
 #
 # import sys
-# import time
+import time
 import logging
 # from logging.handlers import TimedRotatingFileHandler
 # import os.path
 # import re
 
 logger = logging.getLogger(__name__)
-
+mqtt = paho_mqtt.Client()
 
 class KSX4506_Serial:
     def __init__(self):
@@ -54,6 +54,37 @@ class KSX4506_Serial:
             logger.info(data.hex(" "))
 
 
+class TheShopMQTT:
+    def __init__(self):
+        self.mqtt = paho_mqtt.Client()
+        self.is_connect = False
+
+    def on_connect(self, mqtt, userdata, flags, rc):
+        self.is_connect = True
+
+    def on_disconnect(self, mqtt, userdata, rc):
+        self.is_connect = False
+
+    def on_message(self, mqtt, userdata, msg):
+        logger.info("get messaged")
+
+    def start(self):
+        self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
+        self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
+        self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_disconnect(mqtt, userdata, msg))
+
+        mqtt.connect("localhost")
+
+        mqtt.loop_start()
+
+        delay = 1
+        while not self.is_connect:
+            logger.info("waiting MQTT connected ...")
+            time.sleep(0.01)
+
+        logger.info("mqtt connect success!!")
+
+
 def init_logger():
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%H:%M:%S")
@@ -72,5 +103,7 @@ def dump_loop(ksx4506_serial):
 if __name__ == "__main__":
     init_logger()
     logger.info("initialize serial...")
+    mqtt = TheShopMQTT()
+    mqtt.start()
     serial = KSX4506_Serial()
     serial.start()
