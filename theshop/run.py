@@ -62,7 +62,7 @@ class TheShopMQTT:
         self.is_connect = True
 
         topic = "homeassistant/light_1/sds_wallpad/light1/config"
-        mqtt.publish(topic, json.dumps({
+        self.mqtt.publish(topic, json.dumps({
             "_intg": "light",
             "~": "1/light",
             "name": "light_1",
@@ -83,7 +83,8 @@ class TheShopMQTT:
         self.is_connect = False
 
     def on_message(self, mqtt, userdata, msg):
-        logger.info("get messaged")
+        logger.info("get messaged {}".format(msg))
+        logger.info("get messaged {}".format(userdata))
 
     def start(self):
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
@@ -94,7 +95,7 @@ class TheShopMQTT:
 
         while not self.is_connect:
             logger.info("waiting MQTT connected ...")
-            time.sleep(0.01)
+            time.sleep(1)
 
         logger.info("mqtt connect success!!")
 
