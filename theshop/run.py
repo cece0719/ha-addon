@@ -19,7 +19,7 @@ def bytes_xor(bytes):
 
 
 def bytes_sum(bytes):
-    return reduce(lambda acc, cur: (acc + cur) & 256, bytes, 0).to_bytes(1)
+    return reduce(lambda acc, cur: (acc + cur) & 255, bytes, 0).to_bytes(1)
 
 
 class KSX4506_Serial:
@@ -68,7 +68,7 @@ class KSX4506_Serial:
             if len(self.request_command) > 0:
                 logger.info("write command")
                 command = self.request_command.pop()
-                logger.info(command.hex(" "))
+                logger.info("command : " + command.hex(" "))
                 self._ser.write(command)
             logger.info(data.hex(" "))
 
