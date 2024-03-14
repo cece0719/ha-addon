@@ -24,12 +24,7 @@ class KSX4506_Serial:
         self._ser.close()
         self._ser.open()
 
-        # 시리얼에 뭐가 떠다니는지 확인
-        self.set_timeout(5.0)
-        data = self._ser.read(1)
-        self.set_timeout(None)
-        if not data:
-            logger.critical("no active packet at this serial port!")
+        self._ser.timeout = None
 
     def recvRaw(self):
         header = self._ser.read(1)
@@ -54,13 +49,9 @@ class KSX4506_Serial:
     def send(self, a):
         self._ser.write(a)
 
-    def set_timeout(self, a):
-        self._ser.timeout = a
-
 
 def init_logger():
     logger.setLevel(logging.INFO)
-
     formatter = logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%H:%M:%S")
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
@@ -68,24 +59,16 @@ def init_logger():
 
 
 def dump_loop():
-    conn.set_timeout(0.0)
+    logger.info("dump start")
     logs = []
     while True:
-        try:
-            data = conn.recvRaw()
-        except:
-            continue
+        data = conn.recvRaw()
 
         if data:
             logs = []
             for b in data:
                 logs.append(" {:02X}".format(b))
             logger.info("".join(logs))
-        time.sleep(0.01)
-
-    logger.info("".join(logs))
-    logger.warning("dump done.")
-    conn.set_timeout(None)
 
 
 if __name__ == "__main__":
