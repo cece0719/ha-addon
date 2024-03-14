@@ -60,24 +60,24 @@ class TheShopMQTT:
 
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
-
-        topic = "homeassistant/light_1/sds_wallpad/light1/config"
-        self.mqtt.publish(topic, json.dumps({
-            "_intg": "light",
-            "~": "1/light",
-            "name": "light_1",
-            "uniq_id": "light_1",
-            "opt": True,
-            "stat_t": "~/1/power1/state",
-            "cmd_t": "~/1/power/command",
-            "device": {
-                "ids": ["sds_wallpad",],
-                "name": "sds_wallpad",
-                "mf": "Samsung SDS",
-                "mdl": "Samsung SDS Wallpad",
-                "sw": "n-andflash/ha_addons/sds_wallpad",
-            }
-        }))
+        #
+        # topic = "homeassistant/light_1/sds_wallpad/light1/config"
+        # self.mqtt.publish(topic, json.dumps({
+        #     "_intg": "light",
+        #     "~": "1/light",
+        #     "name": "light_1",
+        #     "uniq_id": "light_1",
+        #     "opt": True,
+        #     "stat_t": "~/1/power1/state",
+        #     "cmd_t": "~/1/power/command",
+        #     "device": {
+        #         "ids": ["sds_wallpad",],
+        #         "name": "sds_wallpad",
+        #         "mf": "Samsung SDS",
+        #         "mdl": "Samsung SDS Wallpad",
+        #         "sw": "n-andflash/ha_addons/sds_wallpad",
+        #     }
+        # }))
 
     def on_disconnect(self, mqtt, userdata, rc):
         self.is_connect = False
