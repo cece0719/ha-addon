@@ -73,6 +73,7 @@ class TheShopMQTT:
         logger.info("mqtt on connect success")
 
     def on_disconnect(self, mqtt, userdata, rc):
+        logger.info("mqtt disconnected!!")
         self.is_connect = False
 
     def on_message(self, mqtt, userdata, msg):
