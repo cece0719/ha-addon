@@ -65,6 +65,8 @@ class KSX4506_Serial:
     def start(self):
         while True:
             data = self.read_raw()
+            if len(self.request_command) > 0:
+                self.send(self.request_command.pop())
             logger.info(data.hex(" "))
 
 
