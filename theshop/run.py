@@ -1,6 +1,6 @@
 import serial
 import paho.mqtt.client as paho_mqtt
-# import json
+import json
 #
 # import sys
 import time
@@ -55,13 +55,29 @@ class KSX4506_Serial:
 
 class TheShopMQTT:
     def __init__(self):
-        logger.info("try mqtt init")
         self.is_connect = False
         self.mqtt = paho_mqtt.Client()
-        logger.info("complete mqtt setup")
 
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
+
+        topic = "homeassistant/light_1/sds_wallpad/light1/config"
+        mqtt.publish(topic, json.dumps({
+            "_intg": "light",
+            "~": "1/light",
+            "name": "light_1",
+            "uniq_id": "light_1",
+            "opt": True,
+            "stat_t": "~/1/power1/state",
+            "cmd_t": "~/1/power/command",
+            "device": {
+                "ids": ["sds_wallpad",],
+                "name": "sds_wallpad",
+                "mf": "Samsung SDS",
+                "mdl": "Samsung SDS Wallpad",
+                "sw": "n-andflash/ha_addons/sds_wallpad",
+            }
+        }))
 
     def on_disconnect(self, mqtt, userdata, rc):
         self.is_connect = False
@@ -70,13 +86,9 @@ class TheShopMQTT:
         logger.info("get messaged")
 
     def start(self):
-        logger.info("mqtt start 1")
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
-        logger.info("mqtt start 2")
         self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
-        logger.info("mqtt start 3")
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_disconnect(mqtt, userdata, msg))
-        logger.info("mqtt start 4")
         self.mqtt.connect("192.168.10.150")
         self.mqtt.loop_start()
 
