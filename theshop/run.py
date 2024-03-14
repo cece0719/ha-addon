@@ -90,7 +90,7 @@ class TheShopMQTT:
         self.mqtt.publish(topic, json.dumps({
             "unique_id": "scene_1_1",
             "command_topic": "{}/scene_1/command".format(self.mqtt_prefix),
-            "payload_on": {"aa": "bb"},
+            "payload_on": 'daaad',
             "device": {
                 "ids": ["sds_wallpad",],
                 "name": "sds_wallpad",
