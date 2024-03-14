@@ -66,7 +66,10 @@ class KSX4506_Serial:
         while True:
             data = self.read_raw()
             if len(self.request_command) > 0:
-                self._ser.write(self.request_command.pop())
+                logger.info("write command")
+                command = self.request_command.pop()
+                logger.info(command.hex(" "))
+                self._ser.write(command)
             logger.info(data.hex(" "))
 
 
