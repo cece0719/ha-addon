@@ -77,7 +77,7 @@ class TheShopMQTT:
         logger.info("mqtt start 3")
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_disconnect(mqtt, userdata, msg))
         logger.info("mqtt start 4")
-        self.mqtt.connect("localhost")
+        self.mqtt.connect("192.168.10.150/")
         self.mqtt.loop_start()
 
         while not self.is_connect:
