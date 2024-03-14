@@ -80,6 +80,7 @@ class TheShopMQTT:
 
         topic = "homeassistant/button/test/button_2/config"
 
+        logger.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
             "uniq_id": "button_2",
