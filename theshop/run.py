@@ -68,7 +68,7 @@ class KSX4506_Serial:
             inWating = self._ser.in_waiting
             if inWating >= count:
                 return self._ser.read(count)
-            logger.info("inWaing not eno : " + str(inWating))
+            logger.info("inWaing not eno : " + str(inWating) + ", count : " + str(count))
             time.sleep(0.01)
 
     def send(self, a):
