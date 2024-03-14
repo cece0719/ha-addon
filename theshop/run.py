@@ -77,8 +77,8 @@ class TheShopMQTT:
         self.is_connect = False
 
     def on_message(self, mqtt, userdata, msg):
-        logger.info("get messaged {}".format(msg))
-        logger.info("get messaged {}".format(userdata))
+        logger.info("get messaged {}".format(msg.topic))
+        logger.info("get payload {}".format(msg.payload.decode()))
 
     def start(self):
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
