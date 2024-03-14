@@ -40,7 +40,7 @@ class KSX4506_Serial:
             header = self._ser.read(1)
             if header == b'\xf7':
                 break
-            logger.info("header is not f7 try again : " + " {:02X}".format(header))
+            logger.info("header is not f7 try again")
 
         deviceId = self._ser.read(1)
         deviceSubId = self._ser.read(1)
