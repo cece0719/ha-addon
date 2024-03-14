@@ -83,13 +83,13 @@ class TheShopMQTT:
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
 
-        topic = "homeassistant/button/sds_wallpad/button_4/config"
+        topic = "homeassistant/scene/sds_wallpad/scene_1/config"
 
         logger.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
-            "unique_id": "button_3_3",
-            "command_topic": "{}/button_2/command".format(self.mqtt_prefix),
+            "unique_id": "scene_1_1",
+            "command_topic": "{}/scene_1/command".format(self.mqtt_prefix),
             "device": {
                 "ids": ["sds_wallpad",],
                 "name": "sds_wallpad",
@@ -109,7 +109,7 @@ class TheShopMQTT:
     def on_message(self, mqtt, userdata, msg):
         logger.info("get messaged {}".format(msg.topic))
         logger.info("get payload {}".format(msg.payload.decode()))
-        if msg.topic == "{}/button_2/command".format(self.mqtt_prefix):
+        if msg.topic == "{}/scene_1/command".format(self.mqtt_prefix):
             dd = b'\xf7\x33\x01\x81\x03\x00\x20\x00'
             dd += bytes_xor(dd)
             dd += bytes_sum(dd)
