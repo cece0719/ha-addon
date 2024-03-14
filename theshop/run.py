@@ -10,7 +10,6 @@ import logging
 # import re
 
 logger = logging.getLogger(__name__)
-mqtt = paho_mqtt.Client()
 
 class KSX4506_Serial:
     def __init__(self):
