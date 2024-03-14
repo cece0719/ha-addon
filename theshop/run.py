@@ -13,8 +13,19 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+def bytes_xor(bytes):
+    return reduce(lambda acc, cur: acc ^ cur, bytes, 0).to_bytes(1)
+
+
+def bytes_sum(bytes):
+    return reduce(lambda acc, cur: (acc + cur) & 256, bytes).to_bytes(1)
+
+
 class KSX4506_Serial:
     def __init__(self):
+        self.request_command = []
+
         self._ser = serial.Serial()
         self._ser.port = "/dev/ttyUSB0"
         self._ser.baudrate = 9600
@@ -46,8 +57,10 @@ class KSX4506_Serial:
 
         return header+device_id+device_sub_id+command_type+length+data+xor_sum+add_sum
 
-    def send(self, a):
-        self._ser.write(a)
+    def send(self, command):
+        logger.info("request command : " + command.hex(" "))
+        self.request_command.append(command)
+        # self._ser.write(a)
 
     def start(self):
         while True:
@@ -84,8 +97,8 @@ class TheShopMQTT:
         logger.info("get payload {}".format(msg.payload.decode()))
         if msg.topic == "{}/button_elevator/command".format(self.mqtt_prefix):
             dd = b'\xf7\x33\x01\x81\x03\x00\x20\x00'
-            dd += reduce(lambda acc, cur: acc ^ cur, dd, 0).to_bytes(1)
-            dd += reduce(lambda acc, cur: (acc + cur) & 256, dd).to_bytes(1)
+            dd += bytes_xor(dd)
+            dd += bytes_sum(dd)
             self.serial.send(dd)
 
     def start(self):
