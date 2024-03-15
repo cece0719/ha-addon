@@ -11,8 +11,11 @@ import logging
 # import os.path
 # import re
 
-logger = logging.getLogger(__name__)
-
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)-8s %(message)s",
+    datefmt="%H:%M:%S"
+)
 
 def bytes_xor(bytes):
     return reduce(lambda acc, cur: acc ^ cur, bytes, 0).to_bytes(1)
@@ -46,7 +49,7 @@ class TheShopSerial:
             header = self._ser.read(1)
             if header == b'\xf7':
                 break
-            logger.info("header is not f7 try again : " + str(header.hex()))
+            logging.info("header is not f7 try again : " + str(header.hex()))
 
         device_id = self._ser.read(1)
         device_sub_id = self._ser.read(1)
@@ -59,20 +62,20 @@ class TheShopSerial:
         return header+device_id+device_sub_id+command_type+length+data+xor_sum+add_sum
 
     def send(self, command):
-        logger.info("request command : " + command.hex(" "))
+        logging.info("request command : " + command.hex(" "))
         self.request_command.append(command)
 
     def start(self):
         while True:
             data = self.read_raw()
-            logger.info(data.hex(" "))
+            logging.info(data.hex(" "))
             for device in self.devices:
                 device.receive_serial(data)
 
             if len(self.request_command) > 0:
-                logger.info("write command")
+                logging.info("write command")
                 command = self.request_command.pop()
-                logger.info("command : " + command.hex(" "))
+                logging.info("command : " + command.hex(" "))
                 self._ser.write(command)
 
 
@@ -89,7 +92,7 @@ class TheShopMQTT:
 
         topic = "homeassistant/scene/sds_wallpad/scene_1/config"
 
-        logger.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
+        logging.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         self.mqtt.publish(topic, json.dumps({
             "unique_id": "scene_1_1",
@@ -151,15 +154,15 @@ class TheShopMQTT:
         }))
 
 
-        logger.info("mqtt on connect success")
+        logging.info("mqtt on connect success")
 
     def on_disconnect(self, mqtt, userdata, rc):
-        logger.info("mqtt disconnected!!")
+        logging.info("mqtt disconnected!!")
         self.is_connect = False
 
     def on_message(self, mqtt, userdata, msg):
-        logger.info("get messaged {}".format(msg.topic))
-        logger.info("get payload {}".format(msg.payload.decode()))
+        logging.info("get messaged {}".format(msg.topic))
+        logging.info("get payload {}".format(msg.payload.decode()))
         for device in self.devices:
             device.receive_serial(msg.topic, msg.payload.decode)
 
@@ -172,29 +175,21 @@ class TheShopMQTT:
         self.mqtt.loop_start()
 
         while not self.is_connect:
-            logger.info("waiting MQTT connected ...")
+            logging.info("waiting MQTT connected ...")
             time.sleep(1)
 
-        logger.info("mqtt connect success!!")
-
-
-def init_logger():
-    logger.setLevel(logging.INFO)
-    handler = logging.StreamHandler()
-    handler.setFormatter(logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%H:%M:%S"))
-    logger.addHandler(handler)
+        logging.info("mqtt connect success!!")
 
 
 def dump_loop(ksx4506_serial):
-    logger.info("dump start")
+    logging.info("dump start")
     while True:
         data = ksx4506_serial.read_raw()
-        logger.info(data.hex(" "))
+        logging.info(data.hex(" "))
 
 
 if __name__ == "__main__":
-    init_logger()
-    logger.info("initialize serial...")
+    logging.info("initialize serial...")
     mqtt = TheShopMQTT()
     serial = TheShopSerial()
 
