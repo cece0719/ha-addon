@@ -195,8 +195,9 @@ def dump_loop(ksx4506_serial):
 if __name__ == "__main__":
     init_logger()
     logger.info("initialize serial...")
-
-    serial = TheShopSerial()
-    serial.start()
     mqtt = TheShopMQTT()
+    serial = TheShopSerial()
+
     mqtt.start()
+    serial.start()
+
