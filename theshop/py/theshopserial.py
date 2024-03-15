@@ -48,9 +48,12 @@ class TheShopSerial:
         xor_sum = self._ser.read(1)
         add_sum = self._ser.read(1)
 
-        return header+device_id+device_sub_id+command_type+length+data+xor_sum+add_sum
+        return header + device_id + device_sub_id + command_type + length + data + xor_sum + add_sum
 
     def send(self, command):
+        command = b'\xf7' + command
+        command = command + bytes_xor(command)
+        command = command + bytes_sum(command)
         logging.info("request command : " + command.hex(" "))
         self.request_command.append(command)
 
