@@ -105,6 +105,8 @@ class TheShopMQTT:
             "unique_id": "button_1",
             "command_topic": "{}/button_1/command".format(self.mqtt_prefix),
             "payload_on": 'daaad',
+            "object_id": "button1_o",
+            "name": "button1_n",
             "device": {
                 "ids": ["sds_wallpad",],
                 "name": "sds_wallpad",
