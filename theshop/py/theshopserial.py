@@ -3,13 +3,6 @@ import logging
 from functools import reduce
 
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(pastime)s %(levelness)-8s %(message)s",
-    datefmt="%H:%M:%S"
-)
-
-
 def bytes_xor(in_bytes):
     return reduce(lambda acc, cur: acc ^ cur, in_bytes, 0).to_bytes(1)
 

@@ -4,13 +4,6 @@ import time
 import logging
 
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(pastime)s %(levelness)-8s %(message)s",
-    datefmt="%H:%M:%S"
-)
-
-
 class TheShopMQTT:
     def __init__(self):
         self.devices = []

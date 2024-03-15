@@ -5,7 +5,7 @@ from theshopmqtt import TheShopMQTT
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(pastime)s %(levelness)-8s %(message)s",
+    format="%(asctime)s %(levelname)-8s %(message)s",
     datefmt="%H:%M:%S"
 )
 
