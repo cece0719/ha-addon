@@ -11,10 +11,7 @@ import logging
 # import os.path
 # import re
 
-handler = logging.StreamHandler()
-handler.setFormatter(logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%H:%M:%S"))
 logger = logging.getLogger(__name__)
-logger.addHandler(handler)
 
 
 def bytes_xor(bytes):
@@ -181,6 +178,13 @@ class TheShopMQTT:
         logger.info("mqtt connect success!!")
 
 
+def init_logger():
+    logger.setLevel(logging.INFO)
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter(fmt="%(asctime)s %(levelname)-8s %(message)s", datefmt="%H:%M:%S"))
+    logger.addHandler(handler)
+
+
 def dump_loop(ksx4506_serial):
     logger.info("dump start")
     while True:
@@ -189,6 +193,7 @@ def dump_loop(ksx4506_serial):
 
 
 if __name__ == "__main__":
+    init_logger()
     logger.info("initialize serial...")
 
     serial = TheShopSerial()
