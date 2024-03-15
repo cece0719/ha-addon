@@ -30,6 +30,9 @@ class TheShopSerial:
         self._ser.reset_input_buffer()
         self._ser.reset_output_buffer()
 
+    def add_device(self, device):
+        self.devices.append(device)
+
     def read_raw(self):
         while True:
             header = self._ser.read(1)

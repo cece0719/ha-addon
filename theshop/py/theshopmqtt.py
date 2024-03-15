@@ -12,6 +12,9 @@ class TheShopMQTT:
         self.is_connect = False
         self.mqtt = paho_mqtt.Client()
 
+    def add_device(self, device):
+        self.devices.append(device)
+
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
 
@@ -88,7 +91,7 @@ class TheShopMQTT:
         logging.info("get messaged {}".format(msg.topic))
         logging.info("get payload {}".format(msg.payload.decode()))
         for device in self.devices:
-            device.receive_serial(msg.topic, msg.payload.decode)
+            device.receive_mqtt(msg.topic, msg.payload.decode)
 
     def start(self):
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
