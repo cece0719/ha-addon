@@ -6,7 +6,7 @@ class DeviceElevator:
         self.mqtt = mqtt
         self.serial = serial
         mqtt.add_device(self)
-        serial.add_device(self)
+        # serial.add_device(self)
 
     def receive_mqtt(self, topic, payload):
         if topic == "cece0719/elevator":
