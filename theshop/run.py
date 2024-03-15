@@ -100,6 +100,20 @@ class TheShopMQTT:
             }
         }))
 
+        topic = "homeassistant/button/sds_wallpad/button_1/config"
+        self.mqtt.publish(topic, json.dumps({
+            "unique_id": "button_1",
+            "command_topic": "{}/button_1/command".format(self.mqtt_prefix),
+            "payload_on": 'daaad',
+            "device": {
+                "ids": ["sds_wallpad",],
+                "name": "sds_wallpad",
+                "mf": "Samsung SDS",
+                "mdl": "Samsung SDS Wallpad",
+                "sw": "n-andflash/ha_addons/sds_wallpad",
+            }
+        }))
+
 
         logger.info("mqtt on connect success")
 
