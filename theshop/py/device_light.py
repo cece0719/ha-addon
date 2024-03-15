@@ -15,5 +15,5 @@ class DeviceLight:
                 logging.info("light" + str(self.number) + "status on")
                 self.status = True
             else:
-                logging.info("light" + str(self.number) + "status on")
+                logging.info("light" + str(self.number) + "status off")
                 self.status = False
