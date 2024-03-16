@@ -43,7 +43,7 @@ class TheShopMQTT:
         logging.info("get messaged {}".format(msg.topic))
         logging.info("get payload {}".format(msg.payload.decode()))
         for device in self.devices:
-            device.receive_mqtt(msg.topic, msg.payload.decode)
+            device.receive_mqtt(msg.topic, msg.payload.decode())
 
     def start(self):
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
