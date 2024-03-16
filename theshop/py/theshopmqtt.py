@@ -25,8 +25,8 @@ class TheShopMQTT:
                     topic = publish["topic"]
                     payload = publish["payload"]
                     payload["device"] = {
-                        "ids": ["sds_wallpad", ],
-                        "name": "sds_wallpad",
+                        "ids": ["cece0719", ],
+                        "name": "cec0e719",
                         "mf": "Samsung SDS",
                         "mdl": "Samsung SDS Wallpad",
                         "sw": "n-andflash/ha_addons/sds_wallpad",
