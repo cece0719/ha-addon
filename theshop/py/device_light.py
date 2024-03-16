@@ -28,7 +28,7 @@ class DeviceLight:
 
             data = b'\x0E'
             data += (self.number+16).to_bytes(1, "big")
-            data += b'\x11\x41\x01'
+            data += b'\x41\x01'
             if payload == "ON":
                 data += b'\x01'
             else:
