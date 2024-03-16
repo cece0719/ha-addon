@@ -26,8 +26,9 @@ class DeviceLight:
         if topic == "cece0719/switch_{}/command".format(self.number):
             logging.info("light" + str(self.number) + "command " + str(payload))
 
-            data = b'\x0E\x11\x41'
+            data = b'\x0E'
             data += (self.number+16).to_bytes(1, "big")
+            data += b'\x11\x41\x01'
             if payload == "ON":
                 data += b'\x01'
             else:
