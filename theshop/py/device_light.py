@@ -11,7 +11,7 @@ class DeviceLight:
             {
                 "topic": "homeassistant/switch/cece0719/switch_{}/config".format(self.number),
                 "payload": {
-                    "unique_id": "scene_1_1",
+                    "unique_id": "switch_{}".format(self.number),
                     "command_topic": "cece0719/switch_{}/command".format(self.number),
                     "payload_on": 'ON',
                     "payload_off": 'OFF',
