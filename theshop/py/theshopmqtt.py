@@ -45,6 +45,9 @@ class TheShopMQTT:
         for device in self.devices:
             device.receive_mqtt(msg.topic, msg.payload.decode())
 
+    def publish(self, topic, payload):
+        self.mqtt.publish(topic, payload)
+
     def start(self):
         self.mqtt.on_connect = (lambda mqtt, userdata, flags, rc: self.on_connect(mqtt, userdata, flags, rc))
         self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
