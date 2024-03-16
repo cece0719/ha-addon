@@ -7,10 +7,24 @@ class DeviceLight:
         self.status = False
         self.mqtt = mqtt
         self.serial = serial
+        self.publishes = [
+            {
+                "topic": "homeassistant/switch/cece0719/switch_{}/config".format(self.number),
+                "payload": {
+                    "unique_id": "scene_1_1",
+                    "command_topic": "cece0719/switch_{}/command".format(self.number),
+                    "payload_on": 'ON',
+                    "payload_off": 'OFF',
+                }
+            }
+        ]
+
         mqtt.add_device(self)
         serial.add_device(self)
 
     def receive_mqtt(self, topic, payload):
+        if topic == "cece0719/switch_{}/command".format(self.number):
+            logging.info("light" + str(self.number) + "command " + str(payload))
         return
 
     def receive_serial(self, data):

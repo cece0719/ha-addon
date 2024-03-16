@@ -18,68 +18,20 @@ class TheShopMQTT:
     def on_connect(self, mqtt, userdata, flags, rc):
         self.is_connect = True
 
-        topic = "homeassistant/scene/sds_wallpad/scene_1/config"
-
-        logging.info("subscribe : " + "{}/#".format(self.mqtt_prefix))
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
-        self.mqtt.publish(topic, json.dumps({
-            "unique_id": "scene_1_1",
-            "command_topic": "{}/scene_1/command".format(self.mqtt_prefix),
-            "payload_on": 'daaad',
-            "device": {
-                "ids": ["sds_wallpad",],
-                "name": "sds_wallpad",
-                "mf": "Samsung SDS",
-                "mdl": "Samsung SDS Wallpad",
-                "sw": "n-andflash/ha_addons/sds_wallpad",
-            }
-        }))
-
-        topic = "homeassistant/button/sds_wallpad/button_1/config"
-        self.mqtt.publish(topic, json.dumps({
-            "unique_id": "button_1",
-            "command_topic": "{}/button_1/command".format(self.mqtt_prefix),
-            "payload_on": 'daaad',
-            "object_id": "button1_o",
-            "name": "button1_n",
-            "device": {
-                "ids": ["sds_wallpad",],
-                "name": "sds_wallpad",
-                "mf": "Samsung SDS",
-                "mdl": "Samsung SDS Wallpad",
-                "sw": "n-andflash/ha_addons/sds_wallpad",
-            }
-        }))
-
-        topic = "homeassistant/switch/sds_wallpad/switch_1/config"
-        self.mqtt.publish(topic, json.dumps({
-            "unique_id": "switch_1u",
-            "command_topic": "{}/switch_1/command".format(self.mqtt_prefix),
-            "object_id": "switch_1o",
-            "name": "switch_1n",
-            "device": {
-                "ids": ["sds_wallpad",],
-                "name": "sds_wallpad",
-                "mf": "Samsung SDS",
-                "mdl": "Samsung SDS Wallpad",
-                "sw": "n-andflash/ha_addons/sds_wallpad",
-            }
-        }))
-
-        topic = "homeassistant/button/sds_wallpad/button_9/config"
-        self.mqtt.publish(topic, json.dumps({
-            "unique_id": "button_9u",
-            "command_topic": "{}/button_9c/command".format(self.mqtt_prefix),
-            "object_id": "mqtt_button_2",
-            "name": "button_9n",
-            "device": {
-                "ids": ["sds_wallpad",],
-                "name": "sds_wallpad",
-                "mf": "Samsung SDS",
-                "mdl": "Samsung SDS Wallpad",
-                "sw": "n-andflash/ha_addons/sds_wallpad",
-            }
-        }))
+        for device in self.devices:
+            if device.publishes:
+                for publish in device.publishes:
+                    topic = publish["topic"]
+                    payload = publish["payload"]
+                    payload["device"] = {
+                        "ids": ["sds_wallpad", ],
+                        "name": "sds_wallpad",
+                        "mf": "Samsung SDS",
+                        "mdl": "Samsung SDS Wallpad",
+                        "sw": "n-andflash/ha_addons/sds_wallpad",
+                    }
+                    self.mqtt.publish(topic, json.dumps(payload))
 
         logging.info("mqtt on connect success")
 
