@@ -25,10 +25,14 @@ class DeviceLight:
     def receive_mqtt(self, topic, payload):
         if topic == "cece0719/switch_{}/command".format(self.number):
             logging.info("light" + str(self.number) + "command " + str(payload))
+
+            data = b'\x0E\x11\x41'
+            data += self.number.to_bytes(1, "big")
             if payload == "ON":
-                data = b'\x0E\x11\x41\x01\x01'
+                data += b'\x01'
             else:
-                data = b'\x0E\x11\x41\x01\x00'
+                data += b'\x00'
+
             self.serial.send(data)
         return
 
