@@ -20,7 +20,7 @@ class TheShopMQTT:
 
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         for device in self.devices:
-            if device.publishes:
+            if hasattr(device, "publishes"):
                 for publish in device.publishes:
                     topic = publish["topic"]
                     payload = publish["payload"]
