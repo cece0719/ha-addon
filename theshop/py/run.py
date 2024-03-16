@@ -6,7 +6,7 @@ from device_elevator import DeviceElevator
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format="%(asctime)s.%(msecs) %(levelname)-7s %(message)s",
+    format="%(asctime)s.%(msecs)03d %(levelname)-7s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
