@@ -64,7 +64,7 @@ class TheShopSerial:
             for device in self.devices:
                 device.receive_serial(data)
 
-            if len(self.request_command) > 0:
+            if len(self.request_command) > 0 and data[3] == 129:
                 logging.info("write command")
                 command = self.request_command.pop()
                 logging.info("command : " + command.hex(" "))
