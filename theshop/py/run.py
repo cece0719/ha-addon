@@ -15,7 +15,6 @@ if __name__ == "__main__":
     mqtt = TheShopMQTT()
     serial = TheShopSerial()
 
-    DeviceLight(mqtt, serial, 0)
     DeviceLight(mqtt, serial, 1)
     DeviceLight(mqtt, serial, 2)
     DeviceLight(mqtt, serial, 3)

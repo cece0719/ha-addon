@@ -27,7 +27,7 @@ class DeviceLight:
             logging.info("light" + str(self.number) + "command " + str(payload))
 
             data = b'\x0E\x11\x41'
-            data += self.number.to_bytes(1, "big")
+            data += (self.number+16).to_bytes(1, "big")
             if payload == "ON":
                 data += b'\x01'
             else:
