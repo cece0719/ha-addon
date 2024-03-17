@@ -14,4 +14,6 @@ RUN chmod a+x /run.sh
 
 WORKDIR /share
 
+EXPOSE 8001
+
 CMD [ "/run.sh" ]
