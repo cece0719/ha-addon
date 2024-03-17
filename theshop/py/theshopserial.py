@@ -1,5 +1,6 @@
 import serial
 import logging
+import threading
 from functools import reduce
 
 
@@ -58,14 +59,16 @@ class TheShopSerial:
         self.request_command.append(command)
 
     def start(self):
-        while True:
-            data = self.read_raw()
-            logging.info(data.hex(" "))
-            for device in self.devices:
-                device.receive_serial(data)
+        def listen():
+            while True:
+                data = self.read_raw()
+                logging.info(data.hex(" "))
+                for device in self.devices:
+                    device.receive_serial(data)
 
-            if len(self.request_command) > 0 and data[3] == 129:
-                logging.info("write command")
-                command = self.request_command.pop()
-                logging.info("command : " + command.hex(" "))
-                self._ser.write(command)
+                if len(self.request_command) > 0 and data[3] == 129:
+                    logging.info("write command")
+                    command = self.request_command.pop()
+                    logging.info("command : " + command.hex(" "))
+                    self._ser.write(command)
+        threading.Thread(target=listen).start()
