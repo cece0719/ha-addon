@@ -1,5 +1,5 @@
 name: cece0719 the shop
-version: 1.0.107
+version: 1.0.108
 slug: wallpad
 description: 테스트
 arch:
@@ -47,3 +47,5 @@ schema:
     password: str
     receiveDelay: int
   customfile: str?
+port:
+  - 8001
