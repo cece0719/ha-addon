@@ -29,6 +29,10 @@ if __name__ == "__main__":
 
     class Handler(http.server.SimpleHTTPRequestHandler):
         def do_GET(self):
+            logging.info(self.headers)
+            logging.info(self.path)
+            logging.info(self.request)
+            logging.info(self.requestline)
             self.send_response(HTTPStatus.OK)
             self.end_headers()
             self.wfile.write(b'Hello world')
