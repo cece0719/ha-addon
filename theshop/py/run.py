@@ -33,5 +33,6 @@ if __name__ == "__main__":
             self.end_headers()
             self.wfile.write(b'Hello world')
 
+    logging.info("try http start")
     httpd = socketserver.TCPServer(('', 8001), Handler)
     httpd.serve_forever()
