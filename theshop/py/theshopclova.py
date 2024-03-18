@@ -48,8 +48,10 @@ class TheShopClova:
         header_name = header["name"]
 
         command = header_name.replace("Request", "")
-        ret["header"]["name"] = command+"Confirmation"
-
+        ret["header"]["name"] = (command
+                                 .replace("TurnOn", "TurnOnConfirmation")
+                                 .replace("TurnOff", "TurnOffConfirmation")
+                                 )
 
         for device in self.devices:
             if device.clova["applianceId"] == appliance_id:
