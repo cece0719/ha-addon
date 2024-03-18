@@ -2,7 +2,7 @@ import logging
 
 
 class DeviceLight:
-    def __init__(self, mqtt, serial, number):
+    def __init__(self, mqtt, serial, clova, number):
         self.number = number
         self.status = False
         self.mqtt = mqtt
@@ -19,9 +19,19 @@ class DeviceLight:
                 }
             }
         ]
+        self.clova = {
+            "applianceId": "light_{}".format(self.number),
+            "applianceTypes": ["LIGHT"],
+            "actions": {
+                "TurnOn": lambda: self.set_on(),
+                "TurnOff": lambda: self.set_off(),
+            },
+            "friendlyName": "light_{}".format(self.number),
+        }
 
         mqtt.add_device(self)
         serial.add_device(self)
+        clova.add_device(self)
 
     def receive_mqtt(self, topic, payload):
         if topic == "cece0719/light_{}/command".format(self.number):
