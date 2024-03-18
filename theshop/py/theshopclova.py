@@ -25,7 +25,7 @@ class TheShopClova:
                 "applianceId": clova["applianceId"],
                 "applianceTypes": clova["applianceTypes"],
                 "actions": [*clova["actions"].keys()],
-                "friendlyName": clova["friendlyName"],
+                # "friendlyName": clova["friendlyName"],
             })
 
         body["header"]["name"] = "DiscoverAppliancesResponse"
