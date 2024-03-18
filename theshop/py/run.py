@@ -1,5 +1,6 @@
 import http.server
 import json
+import datetime
 import socketserver
 from http import HTTPStatus
 import logging
@@ -14,13 +15,12 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-
 if __name__ == "__main__":
     logging.info("initialize serial...")
     mqtt = TheShopMQTT()
     serial = TheShopSerial()
 
-    DeviceLight(mqtt, serial, 1)
+    device_light_1 = DeviceLight(mqtt, serial, 1)
     DeviceLight(mqtt, serial, 2)
     DeviceLight(mqtt, serial, 3)
     DeviceElevator(mqtt, serial)
@@ -28,15 +28,35 @@ if __name__ == "__main__":
     mqtt.start()
     serial.start()
 
+
     class Handler(http.server.SimpleHTTPRequestHandler):
-        def do_GET(self):
-            logging.info(self.headers)
-            logging.info(self.path)
-            logging.info(self.request)
-            logging.info(self.requestline)
-            self.send_response(HTTPStatus.OK)
-            self.end_headers()
-            self.wfile.write(b'Hello world')
+        def discover(self, body):
+            body["header"]["name"] = "DiscoverAppliancesResponse"
+            body["payload"] = {
+                "discoveredAppliances": {
+                    "applianceId": "light_1",
+                    "applianceTypes": ["LIGHT"],
+                    "actions": ["TurnOn", "TurnOff"],
+                    "friendlyName": "거실 하나",
+                    "tags": ["거실"]
+                }
+            }
+            return json.dumps(body)
+
+        def action(self, body):
+            ret = {
+                "header": body["header"],
+                "payload": {}
+            }
+            header_name = body["header"]["name"]
+            if header_name == "TurnOnRequest":
+                ret["header"]["name"] = "TurnOnConfirmation"
+                device_light_1.set_on()
+            elif header_name == "TurnOffRequest":
+                ret["header"]["name"] = "TurnOffConfirmation"
+                device_light_1.set_off()
+
+            return json.dumps(ret)
 
         def do_POST(self):
             logging.info(self.headers)
@@ -51,9 +71,14 @@ if __name__ == "__main__":
             body_json = json.loads(body)
             logging.info(body_json)
 
+            if body_json["header"]["name"] == "DiscoverAppliancesRequest":
+                response = self.discover(body_json)
+            else:
+                response = self.action(body_json)
+
             self.send_response(HTTPStatus.OK)
             self.end_headers()
-            self.wfile.write(b'Hello world')
+            self.wfile.write(response)
 
 
     logging.info("try http start")
