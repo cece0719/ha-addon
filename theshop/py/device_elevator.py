@@ -5,7 +5,7 @@ class DeviceElevator:
     def __init__(self, mqtt, serial, clova):
         self.mqtt = mqtt
         self.serial = serial
-        mqtt.add_device(self)
+
         self.publishes = [
             {
                 "topic": "homeassistant/button/cece0719/button_elevator/config",
@@ -25,6 +25,9 @@ class DeviceElevator:
                 "CallElevator": lambda: self.call_elevator()
             },
         }
+
+        mqtt.add_device(self)
+        clova.add_device(self)
 
     def receive_mqtt(self, topic, payload):
         if topic == "cece0719/button_elevator/command" and payload == "PRESS":
