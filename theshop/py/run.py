@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
             self.send_response(HTTPStatus.OK)
             self.end_headers()
-            self.wfile.write(response)
+            self.wfile.write(response.encode("utf8"))
 
 
     logging.info("try http start")
