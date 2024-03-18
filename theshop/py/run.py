@@ -31,17 +31,22 @@ if __name__ == "__main__":
 
     class Handler(http.server.SimpleHTTPRequestHandler):
         def discover(self, body):
+            ret = {"header": body["header"], "payload": {}}
             body["header"]["name"] = "DiscoverAppliancesResponse"
             body["payload"] = {
                 "discoveredAppliances": {
-                    "applianceId": "light_1",
-                    "applianceTypes": ["LIGHT"],
-                    "actions": ["TurnOn", "TurnOff"],
-                    "friendlyName": "거실 하나",
-                    "tags": ["거실"]
+                    [
+                        {
+                            "applianceId": "light_1",
+                            "applianceTypes": ["LIGHT"],
+                            "actions": ["TurnOn", "TurnOff"],
+                            "friendlyName": "거실 하나",
+                            "tags": ["거실"]
+                        }
+                    ]
                 }
             }
-            return json.dumps(body)
+            return json.dumps(ret)
 
         def action(self, body):
             ret = {
@@ -75,6 +80,8 @@ if __name__ == "__main__":
                 response = self.discover(body_json)
             else:
                 response = self.action(body_json)
+
+            logging.info(response)
 
             self.send_response(HTTPStatus.OK)
             self.end_headers()
