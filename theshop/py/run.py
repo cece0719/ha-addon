@@ -25,7 +25,7 @@ if __name__ == "__main__":
     DeviceLight(mqtt, serial, clova, 1)
     DeviceLight(mqtt, serial, clova, 2)
     DeviceLight(mqtt, serial, clova, 3)
-    DeviceElevator(mqtt, serial)
+    DeviceElevator(mqtt, serial, clova)
 
     mqtt.start()
     serial.start()
