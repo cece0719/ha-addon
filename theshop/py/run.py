@@ -22,9 +22,9 @@ if __name__ == "__main__":
     serial = TheShopSerial()
     clova = TheShopClova()
 
-    DeviceLight(mqtt, serial, clova, 1)
-    DeviceLight(mqtt, serial, clova, 2)
-    DeviceLight(mqtt, serial, clova, 3)
+    DeviceLight(1, "거실1", ["거실"], mqtt, serial, clova)
+    DeviceLight(2, "거실2", ["거실"], mqtt, serial, clova)
+    DeviceLight(3, "복도", ["복도"], mqtt, serial, clova)
     DeviceElevator(mqtt, serial, clova)
 
     mqtt.start()

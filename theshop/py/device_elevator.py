@@ -21,6 +21,7 @@ class DeviceElevator:
         self.clova = {
             "applianceId": "elevator",
             "applianceTypes": ["BUILDING_ELEVATOR_CALLER"],
+            "friendlyName": "엘리베이터",
             "actions": {
                 "CallElevator": lambda: self.call_elevator()
             },

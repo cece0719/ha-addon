@@ -1,3 +1,4 @@
+import copy
 import http.server
 import json
 import datetime
@@ -13,25 +14,19 @@ import logging
 class TheShopClova:
     def __init__(self):
         self.devices = []
+        self.discoveredAppliances = []
 
     def add_device(self, device):
         self.devices.append(device)
+        discovered_appliance = copy.deepcopy(device)
+        discovered_appliance["actions"]=[*discovered_appliance["actions"].keys()]
+        self.discoveredAppliances.append(discovered_appliance)
 
     def discover(self, body):
-        discoveredAppliances = []
-        for device in self.devices:
-            clova = device.clova
-            discoveredAppliances.append({
-                "applianceId": clova["applianceId"],
-                "applianceTypes": clova["applianceTypes"],
-                "actions": [*clova["actions"].keys()],
-                # "friendlyName": clova["friendlyName"],
-            })
-
         body["header"]["name"] = "DiscoverAppliancesResponse"
         ret = {
             "header": body["header"],
-            "payload": {"discoveredAppliances": discoveredAppliances}
+            "payload": {"discoveredAppliances": self.discoveredAppliances}
         }
         return json.dumps(ret)
 

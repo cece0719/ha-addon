@@ -2,7 +2,7 @@ import logging
 
 
 class DeviceLight:
-    def __init__(self, mqtt, serial, clova, number):
+    def __init__(self, number, name, tags, mqtt, serial, clova):
         self.number = number
         self.status = False
         self.mqtt = mqtt
@@ -22,6 +22,8 @@ class DeviceLight:
         self.clova = {
             "applianceId": "light_{}".format(self.number),
             "applianceTypes": ["LIGHT"],
+            "friendlyName": name,
+            "tags": tags,
             "actions": {
                 "TurnOn": lambda: self.set_on(),
                 "TurnOff": lambda: self.set_off(),
