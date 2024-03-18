@@ -51,6 +51,7 @@ class TheShopClova:
         ret["header"]["name"] = (command
                                  .replace("TurnOn", "TurnOnConfirmation")
                                  .replace("TurnOff", "TurnOffConfirmation")
+                                 .replace("CallElevator", "CallElevatorConfirmation")
                                  )
 
         for device in self.devices:

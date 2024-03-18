@@ -26,7 +26,6 @@ class DeviceLight:
                 "TurnOn": lambda: self.set_on(),
                 "TurnOff": lambda: self.set_off(),
             },
-            "friendlyName": "light_{}".format(self.number),
         }
 
         mqtt.add_device(self)
