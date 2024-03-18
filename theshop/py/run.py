@@ -1,4 +1,5 @@
 import http.server
+import json
 import socketserver
 from http import HTTPStatus
 import logging
@@ -46,6 +47,9 @@ if __name__ == "__main__":
             content_len = int(self.headers.get("Content-Length"))
             body = self.rfile.read(content_len)
             logging.info(body)
+            logging.info(str(body))
+            body_json = json.loads(body)
+            logging.info(body_json)
 
             self.send_response(HTTPStatus.OK)
             self.end_headers()
