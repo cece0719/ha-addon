@@ -25,8 +25,8 @@ class DeviceLight:
             "friendlyName": name,
             "tags": tags,
             "actions": {
-                "TurnOn": lambda: self.set_on(),
-                "TurnOff": lambda: self.set_off(),
+                "TurnOnRequest": lambda: (self.set_on(), "TurnOnConfirmation"),
+                "TurnOffRequest": lambda: (self.set_off(), "TurnOffConfirmation"),
             },
         }
 

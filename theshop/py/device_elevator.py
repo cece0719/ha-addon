@@ -23,7 +23,7 @@ class DeviceElevator:
             "applianceTypes": ["BUILDING_ELEVATOR_CALLER"],
             "friendlyName": "엘리베이터",
             "actions": {
-                "CallElevator": lambda: self.call_elevator()
+                "CallElevatorRequest": lambda: (self.call_elevator(), "CallElevatorConfirmation"),
             },
         }
 

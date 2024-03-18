@@ -13,13 +13,13 @@ import logging
 
 class TheShopClova:
     def __init__(self):
-        self.devices = []
+        self.devices = {}
         self.discoveredAppliances = []
 
     def add_device(self, device):
-        self.devices.append(device)
-        discovered_appliance = copy.deepcopy(device)
-        discovered_appliance["actions"]=[*discovered_appliance["actions"].keys()]
+        self.devices[device.clova["applianceId"]](device)
+        discovered_appliance = copy.deepcopy(device.clova)
+        discovered_appliance["actions"] = [*discovered_appliance["actions"].keys()]
         self.discoveredAppliances.append(discovered_appliance)
 
     def discover(self, body):
@@ -42,15 +42,8 @@ class TheShopClova:
         appliance_id = appliance["applianceId"]
         header_name = header["name"]
 
-        command = header_name.replace("Request", "")
-        ret["header"]["name"] = (command
-                                 .replace("TurnOn", "TurnOnConfirmation")
-                                 .replace("TurnOff", "TurnOffConfirmation")
-                                 .replace("CallElevator", "CallElevatorConfirmation")
-                                 )
-
-        for device in self.devices:
-            if device.clova["applianceId"] == appliance_id:
-                device.clova["actions"][command]()
+        action = self.devices[appliance_id]["actions"][header_name]
+        response_header = action()
+        ret["header"]["name"] = response_header
 
         return json.dumps(ret)
