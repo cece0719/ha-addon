@@ -24,7 +24,7 @@ class TheShopClova:
             discoveredAppliances.append({
                 "applianceId": clova["applianceId"],
                 "applianceTypes": clova["applianceTypes"],
-                "actions": clova["actions"].keys(),
+                "actions": [*clova["actions"].keys()],
                 "friendlyName": clova["friendlyName"],
             })
 
