@@ -42,6 +42,11 @@ if __name__ == "__main__":
             logging.info(self.path)
             logging.info(self.request)
             logging.info(self.requestline)
+
+            content_len = int(self.headers.get("Content-Length"))
+            body = self.rfile.read(content_len)
+            logging.info(body)
+
             self.send_response(HTTPStatus.OK)
             self.end_headers()
             self.wfile.write(b'Hello world')
