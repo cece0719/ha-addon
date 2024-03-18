@@ -37,6 +37,16 @@ if __name__ == "__main__":
             self.end_headers()
             self.wfile.write(b'Hello world')
 
+        def do_POST(self):
+            logging.info(self.headers)
+            logging.info(self.path)
+            logging.info(self.request)
+            logging.info(self.requestline)
+            self.send_response(HTTPStatus.OK)
+            self.end_headers()
+            self.wfile.write(b'Hello world')
+
+
     logging.info("try http start")
     httpd = socketserver.TCPServer(('', 8001), Handler)
     httpd.serve_forever()
