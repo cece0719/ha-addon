@@ -31,19 +31,20 @@ if __name__ == "__main__":
 
     class Handler(http.server.SimpleHTTPRequestHandler):
         def discover(self, body):
-            ret = {"header": body["header"], "payload": {}}
             body["header"]["name"] = "DiscoverAppliancesResponse"
-            body["payload"] = {
-                "discoveredAppliances": [
-                    {
-                        "applianceId": "light_1",
-                        "applianceTypes": ["LIGHT"],
-                        "actions": ["TurnOn", "TurnOff"],
-                        "friendlyName": "거실 하나",
-                        "tags": ["거실"]
-                    }
-                ]
-            }
+            ret = {
+                "header": body["header"],
+                "payload": {
+                    "discoveredAppliances": [
+                        {
+                            "applianceId": "light_1",
+                            "applianceTypes": ["LIGHT"],
+                            "actions": ["TurnOn", "TurnOff"],
+                            "friendlyName": "거실 하나",
+                            "tags": ["거실"]
+                        }
+                    ]
+                }}
             return json.dumps(ret)
 
         def action(self, body):
