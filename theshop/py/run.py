@@ -5,6 +5,7 @@ import socketserver
 from typing import List
 from device import Device
 from device_light import DeviceLight
+from device_elevator import DeviceElevator
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
 
@@ -24,6 +25,7 @@ if __name__ == "__main__":
         DeviceLight(1, "거실1", ["거실"], mqtt, serial),
         DeviceLight(2, "거실2", ["거실"], mqtt, serial),
         DeviceLight(3, "복도", ["복도"], mqtt, serial),
+        DeviceElevator(mqtt, serial)
     ]
 
     mqtt.add_devices(devices)

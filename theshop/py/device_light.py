@@ -1,6 +1,5 @@
 from typing import List, Dict
 
-from device import DeviceType
 from device_mqtt import DeviceMqtt
 from device_serial import DeviceSerial
 from theshopmqtt import TheShopMQTT
@@ -35,10 +34,6 @@ class DeviceLight(DeviceMqtt, DeviceSerial):
     @property
     def device_tags(self) -> List[str]:
         return self.__device_tags
-
-    @property
-    def device_type(self) -> DeviceType:
-        return DeviceType.LIGHT
 
     def turn_on(self):
         self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')

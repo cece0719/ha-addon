@@ -5,7 +5,7 @@ import json
 import time
 import logging
 
-from device import Device, DeviceType
+from device import Device
 from device_mqtt import DeviceMqtt
 
 
@@ -28,11 +28,9 @@ class TheShopMQTT:
         for device in self.devices.values():
             topic = "homeassistant/light/{}/{}/config".format(self.mqtt_prefix, device.device_id)
             payload = {
-                DeviceType.LIGHT: {
                     "unique_id": device.device_id,
                     "name": device.device_name,
                     "~": "{}/{}".format(self.mqtt_prefix, device.device_id),
-                }
             }[device.device_type]
             payload.update(device.additional_payload)
             payload["device"] = {
