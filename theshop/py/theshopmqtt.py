@@ -31,7 +31,7 @@ class TheShopMQTT:
                     "unique_id": device.device_id,
                     "name": device.device_name,
                     "~": "{}/{}".format(self.mqtt_prefix, device.device_id),
-            }[device.device_type]
+            }
             payload.update(device.additional_payload)
             payload["device"] = {
                 "ids": ["cece0719 the shop"],
