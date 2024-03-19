@@ -1,7 +1,12 @@
+from typing import List, Dict
+
 import serial
 import logging
 import threading
 from functools import reduce
+
+from theshop.py.device import Device
+from theshop.py.device_serial import DeviceSerial
 
 
 def bytes_xor(in_bytes):
@@ -15,7 +20,7 @@ def bytes_sum(in_bytes):
 class TheShopSerial:
     def __init__(self):
         self.request_command = []
-        self.devices = []
+        self.devices: Dict[str, DeviceSerial] = {}
 
         self._ser = serial.Serial()
         self._ser.port = "/dev/ttyUSB0"
@@ -31,8 +36,10 @@ class TheShopSerial:
         self._ser.reset_input_buffer()
         self._ser.reset_output_buffer()
 
-    def add_device(self, device):
-        self.devices.append(device)
+    def add_devices(self, devices: List[Device]):
+        for device in devices:
+            if isinstance(device, DeviceSerial):
+                self.devices[device.device_id] = device
 
     def read_raw(self):
         while True:
@@ -63,7 +70,7 @@ class TheShopSerial:
             while True:
                 data = self.read_raw()
                 logging.info(data.hex(" "))
-                for device in self.devices:
+                for device in self.devices.values():
                     device.receive_serial(data)
 
                 if len(self.request_command) > 0 and data[3] == 129:
@@ -71,4 +78,5 @@ class TheShopSerial:
                     command = self.request_command.pop()
                     logging.info("command : " + command.hex(" "))
                     self._ser.write(command)
+
         threading.Thread(target=listen).start()

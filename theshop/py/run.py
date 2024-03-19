@@ -4,11 +4,14 @@ import json
 import socketserver
 
 from http import HTTPStatus
+from typing import List
+
+from theshop.py.device import Device
+from theshop.py.device_light import DeviceLightSerial
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
-from theshopclova import TheShopClova
-from device_light import DeviceLight
-from device_elevator import DeviceElevator
+# from theshopclova import TheShopClova
+# from device_elevator import DeviceElevator
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -20,12 +23,21 @@ if __name__ == "__main__":
     logging.info("initialize serial...")
     mqtt = TheShopMQTT()
     serial = TheShopSerial()
-    clova = TheShopClova()
+    # clova = TheShopClova()
 
-    DeviceLight(1, "거실1", ["거실"], mqtt, serial, clova)
-    DeviceLight(2, "거실2", ["거실"], mqtt, serial, clova)
-    DeviceLight(3, "복도", ["복도"], mqtt, serial, clova)
-    DeviceElevator(mqtt, serial, clova)
+    devices: List[Device] = [
+        DeviceLightSerial(1, "거실1", ["거실"], mqtt, serial),
+        DeviceLightSerial(2, "거실2", ["거실"], mqtt, serial),
+        DeviceLightSerial(3, "복도", ["복도"], mqtt, serial),
+    ]
+
+    mqtt.add_devices(devices)
+    serial.add_devices(devices)
+
+    # DeviceLight(1, "거실1", ["거실"], mqtt, serial, clova)
+    # DeviceLight(2, "거실2", ["거실"], mqtt, serial, clova)
+    # DeviceLight(3, "복도", ["복도"], mqtt, serial, clova)
+    # DeviceElevator(mqtt, serial, clova)
 
     mqtt.start()
     serial.start()
@@ -33,23 +45,24 @@ if __name__ == "__main__":
 
     class Handler(http.server.SimpleHTTPRequestHandler):
         def do_POST(self):
-            content_len = int(self.headers.get("Content-Length"))
-            body = self.rfile.read(content_len)
-            body_json = json.loads(body)
-
-            logging.info(body_json)
-
-            header_name = body_json["header"]["name"]
-            if header_name == "DiscoverAppliancesRequest":
-                response = clova.discover(body_json)
-            else:
-                response = clova.action(body_json)
-
-            logging.info(response)
-
-            self.send_response(HTTPStatus.OK)
-            self.end_headers()
-            self.wfile.write(response.encode("utf8"))
+            pass
+            # content_len = int(self.headers.get("Content-Length"))
+            # body = self.rfile.read(content_len)
+            # body_json = json.loads(body)
+            #
+            # logging.info(body_json)
+            #
+            # header_name = body_json["header"]["name"]
+            # if header_name == "DiscoverAppliancesRequest":
+            #     response = clova.discover(body_json)
+            # else:
+            #     response = clova.action(body_json)
+            #
+            # logging.info(response)
+            #
+            # self.send_response(HTTPStatus.OK)
+            # self.end_headers()
+            # self.wfile.write(response.encode("utf8"))
 
 
     logging.info("try http start")

@@ -1,61 +1,74 @@
+from typing import List, Dict
+
+from theshop.py.device import DeviceType
+from theshop.py.device_mqtt import DeviceMqtt
+from theshop.py.device_serial import DeviceSerial
+from theshop.py.theshopmqtt import TheShopMQTT
+from theshop.py.theshopserial import TheShopSerial
 import logging
 
 
-class DeviceLight:
-    def __init__(self, number, name, tags, mqtt, serial, clova):
+class DeviceLightSerial(DeviceMqtt, DeviceSerial):
+    def __init__(
+            self,
+            number: int,
+            device_name: str,
+            device_tags: List[str],
+            mqtt: TheShopMQTT,
+            serial: TheShopSerial
+    ):
         self.number = number
-        self.status = False
+        self.__device_name = device_name
+        self.__device_tags = device_tags
         self.mqtt = mqtt
         self.serial = serial
-        self.publishes = [
-            {
-                "topic": "homeassistant/light/cece0719/light_{}/config".format(self.number),
-                "payload": {
-                    "unique_id": "light_{}".format(self.number),
-                    "command_topic": "cece0719/light_{}/command".format(self.number),
-                    "state_topic": "cece0719/light_{}/state".format(self.number),
-                    "payload_on": 'ON',
-                    "payload_off": 'OFF',
-                }
-            }
-        ]
-        self.clova = {
-            "applianceId": "light_{}".format(self.number),
-            "applianceTypes": ["LIGHT"],
-            "friendlyName": name,
-            "tags": tags,
-            "actions": {
-                "TurnOnRequest": lambda: (self.set_on(), "TurnOnConfirmation"),
-                "TurnOffRequest": lambda: (self.set_off(), "TurnOffConfirmation"),
-            },
-        }
+        self.status = False
 
-        mqtt.add_device(self)
-        serial.add_device(self)
-        clova.add_device(self)
+    @property
+    def device_id(self) -> str:
+        return "light_{}".format(self.number)
 
-    def receive_mqtt(self, topic, payload):
-        if topic == "cece0719/light_{}/command".format(self.number):
-            logging.info("light" + str(self.number) + "command " + str(payload))
-            if payload == "ON":
-                self.set_on()
-            elif payload == "OFF":
-                self.set_off()
-        return
+    @property
+    def device_name(self) -> str:
+        return self.__device_name
 
-    def receive_serial(self, data):
+    @property
+    def device_tags(self) -> List[str]:
+        return self.__device_tags
+
+    @property
+    def device_type(self) -> DeviceType:
+        return DeviceType.LIGHT
+
+    def turn_on(self):
+        self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')
+
+    def turn_off(self):
+        self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x00')
+
+    def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x0e\x1f\x81'):
             if data[5 + self.number] == 1:
                 logging.info("light" + str(self.number) + "status on")
-                self.mqtt.publish("cece0719/light_{}/state".format(self.number), "ON")
+                self.mqtt.publish(self, "state", "ON")
                 self.status = True
             else:
                 logging.info("light" + str(self.number) + "status off")
-                self.mqtt.publish("cece0719/light_{}/state".format(self.number), "OFF")
+                self.mqtt.publish(self, "state", "OFF")
                 self.status = False
 
-    def set_on(self):
-        self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')
+    @property
+    def additional_payload(self) -> Dict[str, str]:
+        return {
+            "command_topic": "~/command",
+            "state_topic": "~/state",
+            "payload_on": 'ON',
+            "payload_off": 'OFF',
+        }
 
-    def set_off(self):
-        self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x00')
+    def receive_topic(self, topic: str, payload: str):
+        if topic == "command":
+            if payload == "ON":
+                self.turn_on()
+            elif payload == "OFF":
+                self.turn_off()
