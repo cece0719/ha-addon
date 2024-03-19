@@ -5,9 +5,8 @@ import socketserver
 
 from http import HTTPStatus
 from typing import List
-
-from theshop.py.device import Device
-from theshop.py.device_light import DeviceLightSerial
+from device import Device
+from device_light import DeviceLightSerial
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
 # from theshopclova import TheShopClova
