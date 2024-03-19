@@ -26,7 +26,7 @@ class TheShopMQTT:
         self.is_connect = True
         self.mqtt.subscribe("{}/#".format(self.mqtt_prefix), 0)
         for device in self.devices.values():
-            topic = "homeassistant/light/{}/{}/config".format(self.mqtt_prefix, device.device_id)
+            topic = "homeassistant/{}/{}/{}/config".format(device.mqtt_device_type, self.mqtt_prefix, device.device_id)
             payload = {
                     "unique_id": device.device_id,
                     "name": device.device_name,

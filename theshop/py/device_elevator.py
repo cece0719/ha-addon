@@ -39,3 +39,7 @@ class DeviceElevator(DeviceMqtt):
         if topic == "command":
             if payload == "PRESS":
                 self.call()
+
+    @property
+    def mqtt_device_type(self) -> str:
+        return "button"

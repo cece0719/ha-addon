@@ -35,6 +35,10 @@ class DeviceLight(DeviceMqtt, DeviceSerial):
     def device_tags(self) -> List[str]:
         return self.__device_tags
 
+    @property
+    def mqtt_device_type(self) -> str:
+        return "light"
+
     def turn_on(self):
         self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')
 
