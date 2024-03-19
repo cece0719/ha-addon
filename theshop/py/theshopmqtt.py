@@ -6,7 +6,6 @@ import time
 import logging
 
 from device import Device, DeviceType
-from device_light import DeviceLightSerial
 from device_mqtt import DeviceMqtt
 
 

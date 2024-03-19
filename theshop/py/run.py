@@ -1,16 +1,12 @@
 import logging
 import http.server
-import json
 import socketserver
 
-from http import HTTPStatus
 from typing import List
 from device import Device
-from device_light import DeviceLightSerial
+from device_light import DeviceLight
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
-# from theshopclova import TheShopClova
-# from device_elevator import DeviceElevator
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -25,9 +21,9 @@ if __name__ == "__main__":
     # clova = TheShopClova()
 
     devices: List[Device] = [
-        DeviceLightSerial(1, "거실1", ["거실"], mqtt, serial),
-        DeviceLightSerial(2, "거실2", ["거실"], mqtt, serial),
-        DeviceLightSerial(3, "복도", ["복도"], mqtt, serial),
+        DeviceLight(1, "거실1", ["거실"], mqtt, serial),
+        DeviceLight(2, "거실2", ["거실"], mqtt, serial),
+        DeviceLight(3, "복도", ["복도"], mqtt, serial),
     ]
 
     mqtt.add_devices(devices)

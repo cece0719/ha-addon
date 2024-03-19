@@ -8,7 +8,7 @@ from theshopserial import TheShopSerial
 import logging
 
 
-class DeviceLightSerial(DeviceMqtt, DeviceSerial):
+class DeviceLight(DeviceMqtt, DeviceSerial):
     def __init__(
             self,
             number: int,
