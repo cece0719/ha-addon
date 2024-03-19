@@ -2,7 +2,7 @@ from enum import Enum, auto
 from typing import List, Dict
 from abc import *
 
-from theshop.py.device import Device
+from device import Device
 
 
 class DeviceMqtt(Device, metaclass=ABCMeta):

@@ -5,9 +5,9 @@ import json
 import time
 import logging
 
-from theshop.py.device import Device, DeviceType
-from theshop.py.device_light import DeviceLightSerial
-from theshop.py.device_mqtt import DeviceMqtt
+from device import Device, DeviceType
+from device_light import DeviceLightSerial
+from device_mqtt import DeviceMqtt
 
 
 class TheShopMQTT:

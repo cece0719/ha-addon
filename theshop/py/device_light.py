@@ -1,10 +1,10 @@
 from typing import List, Dict
 
-from theshop.py.device import DeviceType
-from theshop.py.device_mqtt import DeviceMqtt
-from theshop.py.device_serial import DeviceSerial
-from theshop.py.theshopmqtt import TheShopMQTT
-from theshop.py.theshopserial import TheShopSerial
+from device import DeviceType
+from device_mqtt import DeviceMqtt
+from device_serial import DeviceSerial
+from theshopmqtt import TheShopMQTT
+from theshopserial import TheShopSerial
 import logging
 
 
