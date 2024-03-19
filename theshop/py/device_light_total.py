@@ -41,7 +41,10 @@ class DeviceLightTotal(DeviceMqtt, DeviceSerial):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x33\x01\x81'):
             self.status = (data[6] != 4)
-            self.mqtt.publish(self, "state", "ON")
+            if self.status:
+                self.mqtt.publish(self, "state", "ON")
+            else:
+                self.mqtt.publish(self, "state", "OFF")
 
     @property
     def additional_payload(self) -> Dict[str, str]:
