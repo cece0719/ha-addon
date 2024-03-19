@@ -7,6 +7,7 @@ from device import Device
 from device_light import DeviceLight
 from device_light_total import DeviceLightTotal
 from device_elevator import DeviceElevator
+from device_gas import DeviceGas
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
 
@@ -27,6 +28,7 @@ if __name__ == "__main__":
         DeviceLight(2, "거실2", ["거실"], mqtt, serial),
         DeviceLight(3, "복도", ["복도"], mqtt, serial),
         DeviceLightTotal(mqtt, serial),
+        DeviceGas(mqtt, serial),
         DeviceElevator(mqtt, serial),
     ]
 
