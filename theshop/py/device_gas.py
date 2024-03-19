@@ -37,7 +37,7 @@ class DeviceGas(DeviceMqtt, DeviceSerial):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x12\x01\x81'):
-            self.status = (data[5] == 1)
+            self.status = (data[6] == 1)
             if self.status:
                 self.mqtt.publish(self, "state", "ON")
             else:
@@ -54,7 +54,5 @@ class DeviceGas(DeviceMqtt, DeviceSerial):
 
     def receive_topic(self, topic: str, payload: str):
         if topic == "command":
-            if payload == "ON":
-                self.turn_on()
-            elif payload == "OFF":
+            if payload == "OFF":
                 self.turn_off()
