@@ -1,5 +1,5 @@
 from typing import List, Dict, Callable
-from device.device_mqtt import DeviceMqtt
+from .device_mqtt import DeviceMqtt
 
 
 class DeviceElevator(DeviceMqtt):

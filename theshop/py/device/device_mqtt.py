@@ -1,7 +1,7 @@
 from typing import Dict, Callable
 from abc import *
 
-from device.device import Device
+from .device import Device
 
 
 class DeviceMqtt(Device, metaclass=ABCMeta):
