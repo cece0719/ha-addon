@@ -1,6 +1,6 @@
 from abc import *
 
-from device import Device
+from device.device import Device
 
 
 class DeviceSerial(Device, metaclass=ABCMeta):
