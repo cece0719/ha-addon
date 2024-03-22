@@ -1,18 +1,13 @@
-from typing import List, Dict
-
+from typing import List, Dict, Callable
 from device_mqtt import DeviceMqtt
-from theshopmqtt import TheShopMQTT
-from theshopserial import TheShopSerial
 
 
 class DeviceElevator(DeviceMqtt):
     def __init__(
             self,
-            mqtt: TheShopMQTT,
-            serial: TheShopSerial
+            serial_send: Callable[[bytes], None],
     ):
-        self.mqtt = mqtt
-        self.serial = serial
+        self.serial_send = serial_send
 
     @property
     def device_id(self) -> str:
@@ -27,7 +22,7 @@ class DeviceElevator(DeviceMqtt):
         return []
 
     def call(self):
-        self.serial.send(b'\x33\x01\x81\x03\x00\x20\x00')
+        self.serial_send(b'\x33\x01\x81\x03\x00\x20\x00')
 
     @property
     def additional_payload(self) -> Dict[str, str]:

@@ -5,8 +5,8 @@ import logging
 import threading
 from functools import reduce
 
-from device import Device
-from device_serial import DeviceSerial
+from device.device import Device
+from device.device_serial import DeviceSerial
 
 
 def bytes_xor(in_bytes):

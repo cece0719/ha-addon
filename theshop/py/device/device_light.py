@@ -1,9 +1,8 @@
-from typing import List, Dict
+from typing import List, Dict, Callable
 
 from device_mqtt import DeviceMqtt
 from device_serial import DeviceSerial
-from theshopmqtt import TheShopMQTT
-from theshopserial import TheShopSerial
+from device import Device
 import logging
 
 
@@ -13,15 +12,15 @@ class DeviceLight(DeviceMqtt, DeviceSerial):
             number: int,
             device_name: str,
             device_tags: List[str],
-            mqtt: TheShopMQTT,
-            serial: TheShopSerial
+            mqtt_publish: Callable[[Device, str, str], None],
+            serial_send: Callable[[bytes], None],
     ):
         self.number = number
         self.__device_name = device_name
         self.__device_tags = device_tags
-        self.mqtt = mqtt
-        self.serial = serial
         self.status = False
+        self.mqtt_publish = mqtt_publish
+        self.serial_send = serial_send
 
     @property
     def device_id(self) -> str:
@@ -40,20 +39,20 @@ class DeviceLight(DeviceMqtt, DeviceSerial):
         return "light"
 
     def turn_on(self):
-        self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')
+        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')
 
     def turn_off(self):
-        self.serial.send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x00')
+        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x00')
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x0e\x1f\x81'):
             if data[5 + self.number] == 1:
                 logging.info("light" + str(self.number) + "status on")
-                self.mqtt.publish(self, "state", "ON")
+                self.mqtt_publish(self, "state", "ON")
                 self.status = True
             else:
                 logging.info("light" + str(self.number) + "status off")
-                self.mqtt.publish(self, "state", "OFF")
+                self.mqtt_publish(self, "state", "OFF")
                 self.status = False
 
     @property

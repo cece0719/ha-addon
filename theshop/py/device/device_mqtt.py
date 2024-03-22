@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, Callable
 from abc import *
 
 from device import Device
@@ -15,7 +15,6 @@ class DeviceMqtt(Device, metaclass=ABCMeta):
     @abstractmethod
     def mqtt_device_type(self) -> str:
         pass
-
 
     @abstractmethod
     def receive_topic(self, topic: str, payload: str):

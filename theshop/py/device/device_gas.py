@@ -1,28 +1,27 @@
-from typing import List, Dict
+from typing import List, Dict, Callable
 
 from device_mqtt import DeviceMqtt
 from device_serial import DeviceSerial
-from theshopmqtt import TheShopMQTT
-from theshopserial import TheShopSerial
+from device import Device
 
 
-class DeviceLightTotal(DeviceMqtt, DeviceSerial):
+class DeviceGas(DeviceMqtt, DeviceSerial):
     def __init__(
             self,
-            mqtt: TheShopMQTT,
-            serial: TheShopSerial
+            mqtt_publish: Callable[[Device, str, str], None],
+            serial_send: Callable[[bytes], None],
     ):
-        self.mqtt = mqtt
-        self.serial = serial
+        self.mqtt_publish = mqtt_publish
+        self.serial_send = serial_send
         self.status = False
 
     @property
     def device_id(self) -> str:
-        return "light_total"
+        return "gas"
 
     @property
     def device_name(self) -> str:
-        return "소등"
+        return "가스"
 
     @property
     def device_tags(self) -> List[str]:
@@ -30,21 +29,18 @@ class DeviceLightTotal(DeviceMqtt, DeviceSerial):
 
     @property
     def mqtt_device_type(self) -> str:
-        return "light"
-
-    def turn_on(self):
-        self.serial.send(b'\x33\x01\x41\x01\x00')
+        return "switch"
 
     def turn_off(self):
-        self.serial.send(b'\x33\x01\x41\x01\x01')
+        self.serial_send(b'\x12\x01\x41\x01\x00')
 
     def receive_serial(self, data: bytes):
-        if data.startswith(b'\xf7\x33\x01\x81'):
-            self.status = (data[6] != 4)
+        if data.startswith(b'\xf7\x12\x01\x81'):
+            self.status = (data[6] == 1)
             if self.status:
-                self.mqtt.publish(self, "state", "ON")
+                self.mqtt_publish(self, "state", "ON")
             else:
-                self.mqtt.publish(self, "state", "OFF")
+                self.mqtt_publish(self, "state", "OFF")
 
     @property
     def additional_payload(self) -> Dict[str, str]:
@@ -57,7 +53,5 @@ class DeviceLightTotal(DeviceMqtt, DeviceSerial):
 
     def receive_topic(self, topic: str, payload: str):
         if topic == "command":
-            if payload == "ON":
-                self.turn_on()
-            elif payload == "OFF":
+            if payload == "OFF":
                 self.turn_off()

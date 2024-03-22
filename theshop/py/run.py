@@ -2,12 +2,13 @@ import logging
 import http.server
 import socketserver
 
-from typing import List
-from device import Device
-from device_light import DeviceLight
-from device_light_total import DeviceLightTotal
-from device_elevator import DeviceElevator
-from device_gas import DeviceGas
+from typing import List, Callable
+from device.device import Device
+from device.device_light import DeviceLight
+from device.device_light_total import DeviceLightTotal
+from device.device_elevator import DeviceElevator
+from device.device_gas import DeviceGas
+from device.device_mqtt import DeviceMqtt
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
 
@@ -23,13 +24,17 @@ if __name__ == "__main__":
     serial = TheShopSerial()
     # clova = TheShopClova()
 
+    mqtt_publish: Callable[[DeviceMqtt, str, str], None] = mqtt.publish
+    serial_send: Callable[[bytes], None] = \
+        lambda command: serial.send(command)
+
     devices: List[Device] = [
-        DeviceLight(1, "거실1", ["거실"], mqtt, serial),
-        DeviceLight(2, "거실2", ["거실"], mqtt, serial),
-        DeviceLight(3, "복도", ["복도"], mqtt, serial),
-        DeviceLightTotal(mqtt, serial),
-        DeviceGas(mqtt, serial),
-        DeviceElevator(mqtt, serial),
+        DeviceLight(1, "거실1", ["거실"], mqtt_publish, serial_send),
+        DeviceLight(2, "거실2", ["거실"], mqtt_publish, serial_send),
+        DeviceLight(3, "복도", ["복도"], mqtt_publish, serial_send),
+        DeviceLightTotal(mqtt_publish, serial_send),
+        DeviceGas(mqtt_publish, serial_send),
+        DeviceElevator(serial_send),
     ]
 
     mqtt.add_devices(devices)
