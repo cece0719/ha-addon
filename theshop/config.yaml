@@ -1,5 +1,5 @@
 name: cece0719 the shop
-version: 1.0.148
+version: 1.0.149
 slug: wallpad
 description: 테스트
 arch:
@@ -10,7 +10,7 @@ arch:
   - i386
 map:
   - share:rw
-url: https://github.com/cece0719/ha-addons
+url: https://github.com/cece0719/ha-addon
 startup: application
 boot: auto
 uart: true
