@@ -1,3 +1,4 @@
+import json
 import logging
 import http.server
 import socketserver
@@ -10,6 +11,7 @@ from device.device_light_total import DeviceLightTotal
 from device.device_elevator import DeviceElevator
 from device.device_gas import DeviceGas
 from device.device_mqtt import DeviceMqtt
+from theshopclova import TheShopClova
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
 
@@ -23,7 +25,7 @@ if __name__ == "__main__":
     logging.info("initialize serial...")
     mqtt = TheShopMQTT()
     serial = TheShopSerial()
-    # clova = TheShopClova()
+    clova = TheShopClova()
 
     mqtt_publish: Callable[[DeviceMqtt, str, str], None] = mqtt.publish
     serial_send: Callable[[bytes], None] = \
