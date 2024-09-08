@@ -1,6 +1,7 @@
 import logging
 import http.server
 import socketserver
+from http import HTTPStatus
 
 from typing import List, Callable
 from device.device import Device
