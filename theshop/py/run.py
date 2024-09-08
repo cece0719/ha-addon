@@ -50,6 +50,10 @@ if __name__ == "__main__":
 
 
     class Handler(http.server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(HTTPStatus.OK)
+            self.end_headers()
+            self.wfile.write(b'Hello world')
         def do_POST(self):
             content_len = int(self.headers.get("Content-Length"))
             body = self.rfile.read(content_len)
