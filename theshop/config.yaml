@@ -1,5 +1,5 @@
 name: cece0719 the shop
-version: 1.0.163
+version: 1.0.164
 slug: wallpad
 description: 테스트
 arch:
@@ -18,7 +18,9 @@ boot: auto
 uart: true
 options:
 #  type: serial
-  logging: true
+  logging:
+    mqtt: true
+    serial: true
 #  serial:
 #    port: "/dev/ttyUSB0"
 #  socket:
@@ -28,7 +30,9 @@ options:
 #    receiveDelay: 10000
 schema:
 #  type: list(serial|socket)
-  logging: bool
+  logging:
+    mqtt: bool
+    serial: bool
 #  serial:
 #    port: str?
 #  socket:

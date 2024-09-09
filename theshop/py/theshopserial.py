@@ -73,7 +73,7 @@ class TheShopSerial:
         def listen():
             while True:
                 data = self.read_raw()
-                if self.option["logging"]:
+                if self.option["logging"]["serial"]:
                     logging.info(data.hex(" "))
                 for device in self.devices.values():
                     device.receive_serial(data)
