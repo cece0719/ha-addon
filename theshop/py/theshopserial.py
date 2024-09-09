@@ -23,6 +23,7 @@ class TheShopSerial:
             self,
             option: Option
     ):
+        self.option = option
         self.request_command = []
         self.devices: Dict[str, DeviceSerial] = {}
 
@@ -73,7 +74,8 @@ class TheShopSerial:
         def listen():
             while True:
                 data = self.read_raw()
-                logging.info(data.hex(" "))
+                if self.option.get("logging"):
+                    logging.info(data.hex(" "))
                 for device in self.devices.values():
                     device.receive_serial(data)
 

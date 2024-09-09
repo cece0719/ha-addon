@@ -15,6 +15,7 @@ class TheShopMQTT:
             self,
             option: Option
     ):
+        self.option: Option
         self.devices: Dict[str, DeviceMqtt] = {}
 
         self.mqtt_prefix = "cece0719"
