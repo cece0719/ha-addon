@@ -5,12 +5,16 @@ import json
 import time
 import logging
 
+from option import Option
 from device.device import Device
 from device.device_mqtt import DeviceMqtt
 
 
 class TheShopMQTT:
-    def __init__(self):
+    def __init__(
+            self,
+            option: Option
+    ):
         self.devices: Dict[str, DeviceMqtt] = {}
 
         self.mqtt_prefix = "cece0719"

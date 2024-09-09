@@ -7,6 +7,7 @@ from functools import reduce
 
 from device.device import Device
 from device.device_serial import DeviceSerial
+from option import Option
 
 
 def bytes_xor(in_bytes):
@@ -18,7 +19,10 @@ def bytes_sum(in_bytes):
 
 
 class TheShopSerial:
-    def __init__(self):
+    def __init__(
+            self,
+            option: Option
+    ):
         self.request_command = []
         self.devices: Dict[str, DeviceSerial] = {}
 

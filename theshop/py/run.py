@@ -12,6 +12,7 @@ from device.device_light_total import DeviceLightTotal
 from device.device_elevator import DeviceElevator
 from device.device_gas import DeviceGas
 from device.device_mqtt import DeviceMqtt
+from theshop.py.option import Option
 from theshopclova import TheShopClova
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
@@ -22,23 +23,13 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-def init_option(argv):
-    # option 파일 선택
-    option_file = argv[1]
-
-    global Options
-
-    with open(option_file) as f:
-        Options = json.load(f)
-
-    logging.info(Options)
-
 if __name__ == "__main__":
     logging.info("initialize serial...")
-    init_option(sys.argv)
-    mqtt = TheShopMQTT()
-    serial = TheShopSerial()
-    clova = TheShopClova()
+    option = Option(sys.argv[1])
+    logging.info(option.get("type"))
+    mqtt = TheShopMQTT(option)
+    serial = TheShopSerial(option)
+    clova = TheShopClova(option)
 
     mqtt_publish: Callable[[DeviceMqtt, str, str], None] = mqtt.publish
     serial_send: Callable[[bytes], None] = \
