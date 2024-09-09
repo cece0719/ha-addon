@@ -42,6 +42,7 @@ if __name__ == "__main__":
 
     mqtt.add_devices(devices)
     serial.add_devices(devices)
+    # clova.add_devices(devices)
 
     # DeviceLight(1, "거실1", ["거실"], mqtt, serial, clova)
     # DeviceLight(2, "거실2", ["거실"], mqtt, serial, clova)

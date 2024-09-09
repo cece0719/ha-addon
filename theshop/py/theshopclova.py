@@ -18,7 +18,7 @@ class TheShopClova:
 
     def add_device(self, device):
         appliance_id = device.clova["applianceId"]
-        self.devices[device.clova["applianceId"]] = device
+        self.devices[appliance_id] = device
         discovered_appliance = copy.deepcopy(device.clova)
         discovered_appliance["actions"] = [*discovered_appliance["actions"].keys()]
         self.discoveredAppliances.append(discovered_appliance)
