@@ -12,7 +12,6 @@ from device.device_light_total import DeviceLightTotal
 from device.device_elevator import DeviceElevator
 from device.device_gas import DeviceGas
 from device.device_mqtt import DeviceMqtt
-from option import Option
 from theshopclova import TheShopClova
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
@@ -25,8 +24,7 @@ logging.basicConfig(
 
 if __name__ == "__main__":
     logging.info("initialize serial...")
-    option = Option(sys.argv[1])
-    logging.info(option.get("type"))
+    option = json.load(open(sys.argv[1]))
     mqtt = TheShopMQTT(option)
     serial = TheShopSerial(option)
     clova = TheShopClova(option)

@@ -10,14 +10,12 @@ import json
 import socketserver
 import logging
 
-from option import Option
-
-
 class TheShopClova:
     def __init__(
             self,
-            option: Option
+            option
     ):
+        self.option = option
         self.devices = {}
         self.discoveredAppliances = []
 

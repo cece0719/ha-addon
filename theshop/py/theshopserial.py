@@ -7,7 +7,6 @@ from functools import reduce
 
 from device.device import Device
 from device.device_serial import DeviceSerial
-from option import Option
 
 
 def bytes_xor(in_bytes):
@@ -21,7 +20,7 @@ def bytes_sum(in_bytes):
 class TheShopSerial:
     def __init__(
             self,
-            option: Option
+            option
     ):
         self.option = option
         self.request_command = []
@@ -74,7 +73,7 @@ class TheShopSerial:
         def listen():
             while True:
                 data = self.read_raw()
-                if self.option.get("logging"):
+                if self.option["logging"]:
                     logging.info(data.hex(" "))
                 for device in self.devices.values():
                     device.receive_serial(data)
