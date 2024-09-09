@@ -10,13 +10,19 @@ import json
 import socketserver
 import logging
 
+from typing import List, Dict
+
+from device.device_clova import DeviceClova
+from device.device import Device
+
+
 class TheShopClova:
     def __init__(
             self,
             option
     ):
         self.option = option
-        self.devices = {}
+        self.devices: Dict[str, DeviceClova] = {}
         self.discoveredAppliances = []
 
     def add_device(self, device):
@@ -28,9 +34,17 @@ class TheShopClova:
 
     def discover(self, body):
         body["header"]["name"] = "DiscoverAppliancesResponse"
+
+        discoveredAppliances = []
+        for device in self.devices:
+            discovered_appliance = device.getDiscoveredAppliance()
+            discoveredAppliances.append(discovered_appliance)
+
         ret = {
             "header": body["header"],
-            "payload": {"discoveredAppliances": self.discoveredAppliances}
+            "payload": {
+                "discoveredAppliances": self.discoveredAppliances
+            }
         }
         return json.dumps(ret)
 
@@ -51,3 +65,8 @@ class TheShopClova:
         ret["header"]["name"] = response_header
 
         return json.dumps(ret)
+
+    def add_devices(self, devices: List[Device]):
+        for device in devices:
+            if isinstance(device, DeviceClova):
+                self.devices[device.device_id] = device

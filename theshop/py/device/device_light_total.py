@@ -1,11 +1,12 @@
 from typing import List, Dict, Callable
 
+from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 from .device_serial import DeviceSerial
 from .device import Device
 
 
-class DeviceLightTotal(DeviceMqtt, DeviceSerial):
+class DeviceLightTotal(DeviceMqtt, DeviceSerial, DeviceClova):
     def __init__(
             self,
             mqtt_publish: Callable[[Device, str, str], None],
@@ -60,3 +61,11 @@ class DeviceLightTotal(DeviceMqtt, DeviceSerial):
                 self.turn_on()
             elif payload == "OFF":
                 self.turn_off()
+
+    def getDiscoveredAppliance(self):
+        return {
+            "applianceId" : self.device_id,
+            "friendlyName" : self.device_name,
+            "applianceTypes" : ["LIGHT"],
+            "actions" : ["TurnOn", "TurnOff", "GetDeviceState"]
+        }
