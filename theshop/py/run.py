@@ -12,7 +12,7 @@ from device.device_light_total import DeviceLightTotal
 from device.device_elevator import DeviceElevator
 from device.device_gas import DeviceGas
 from device.device_mqtt import DeviceMqtt
-from theshop.py.option import Option
+from option import Option
 from theshopclova import TheShopClova
 from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
