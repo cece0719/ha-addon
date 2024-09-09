@@ -25,25 +25,18 @@ class TheShopClova:
         self.devices: Dict[str, DeviceClova] = {}
         self.discoveredAppliances = []
 
-    def add_device(self, device):
-        appliance_id = device.clova["applianceId"]
-        self.devices[appliance_id] = device
-        discovered_appliance = copy.deepcopy(device.clova)
-        discovered_appliance["actions"] = [*discovered_appliance["actions"].keys()]
-        self.discoveredAppliances.append(discovered_appliance)
-
     def discover(self, body):
         body["header"]["name"] = "DiscoverAppliancesResponse"
 
-        discoveredAppliances = []
-        for device in self.devices:
+        discovered_appliances = []
+        for device in self.devices.values():
             discovered_appliance = device.getDiscoveredAppliance()
-            discoveredAppliances.append(discovered_appliance)
+            discovered_appliances.append(discovered_appliance)
 
         ret = {
             "header": body["header"],
             "payload": {
-                "discoveredAppliances": self.discoveredAppliances
+                "discoveredAppliances": discovered_appliances
             }
         }
         return json.dumps(ret)
