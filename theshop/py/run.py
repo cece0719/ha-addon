@@ -2,6 +2,7 @@ import json
 import logging
 import http.server
 import socketserver
+import sys
 from http import HTTPStatus
 
 from typing import List, Callable
@@ -21,8 +22,20 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
+def init_option(argv):
+    # option 파일 선택
+    option_file = argv[1]
+
+    global Options
+
+    with open(option_file) as f:
+        Options = json.load(f)
+
+    logging.info(Options)
+
 if __name__ == "__main__":
     logging.info("initialize serial...")
+    init_option(sys.argv)
     mqtt = TheShopMQTT()
     serial = TheShopSerial()
     clova = TheShopClova()
