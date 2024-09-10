@@ -30,36 +30,52 @@ class TheShopClova:
 
         discovered_appliances = []
         for device in self.devices.values():
-            discovered_appliance = device.getDiscoveredAppliance()
+            discovered_appliance = device.get_discovered_appliance()
             discovered_appliances.append(discovered_appliance)
 
-        ret = {
+        return json.dumps({
             "header": body["header"],
             "payload": {
                 "discoveredAppliances": discovered_appliances
             }
-        }
-        return json.dumps(ret)
+        })
 
     def action(self, body):
-        ret = {
-            "header": body["header"],
-            "payload": {}
-        }
         header = body["header"]
         payload = body["payload"]
 
         appliance = payload["appliance"]
         appliance_id = appliance["applianceId"]
-        header_name = header["name"]
 
-        action = self.devices[appliance_id]["actions"][header_name]
-        response_header = action()
-        ret["header"]["name"] = response_header
-
-        return json.dumps(ret)
+        action = self.devices[appliance_id].action(body)
+        return json.dumps(action())
 
     def add_devices(self, devices: List[Device]):
         for device in devices:
             if isinstance(device, DeviceClova):
                 self.devices[device.device_id] = device
+
+    def start(self):
+        clova = self
+        class Handler(http.server.SimpleHTTPRequestHandler):
+            def do_POST(self):
+                content_len = int(self.headers.get("Content-Length"))
+                body = self.rfile.read(content_len)
+                body_json = json.loads(body)
+                logging.info("http request : " + body_json)
+
+                header_name = body_json["header"]["name"]
+                if header_name == "DiscoverAppliancesRequest":
+                    response = clova.discover(body_json)
+                else:
+                    response = clova.action(body_json)
+
+                logging.info("http response : " + response)
+
+                self.send_response(HTTPStatus.OK)
+                self.end_headers()
+                self.wfile.write(response.encode("utf8"))
+        logging.info("try http start")
+        httpd = socketserver.TCPServer(('', 8001), Handler)
+        httpd.serve_forever()
+
