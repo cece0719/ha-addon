@@ -1,6 +1,8 @@
 import logging
 from abc import *
 
+from typing import Dict
+
 from .device import Device
 from .device_elevator import DeviceElevator
 from .device_light import DeviceLight
@@ -32,5 +34,5 @@ class DeviceClova(Device, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def action(self, command):
+    def action(self, body) -> Dict:
         pass

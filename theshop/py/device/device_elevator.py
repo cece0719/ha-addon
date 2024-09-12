@@ -1,10 +1,10 @@
 from typing import List, Dict, Callable
 
-from .device_clova import DeviceClova, CallElevator
+from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 
 
-class DeviceElevator(DeviceMqtt, DeviceClova, CallElevator):
+class DeviceElevator(DeviceMqtt, DeviceClova):
     def __init__(
             self,
             serial_send: Callable[[bytes], None],
@@ -49,7 +49,8 @@ class DeviceElevator(DeviceMqtt, DeviceClova, CallElevator):
     def clova_actions(self) -> list[str]:
         return ["CallElevator"]
 
-    def action(self, body):
+    def action(self, body) -> Dict:
+        self.call_elevator()
         ret = {
             "header": body["header"],
             "payload": {}

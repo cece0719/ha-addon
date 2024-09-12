@@ -41,9 +41,7 @@ class TheShopClova:
         })
 
     def action(self, body):
-        header = body["header"]
         payload = body["payload"]
-
         appliance = payload["appliance"]
         appliance_id = appliance["applianceId"]
 
