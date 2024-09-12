@@ -59,8 +59,8 @@ class TheShopClova:
             def do_POST(self):
                 content_len = int(self.headers.get("Content-Length"))
                 body = self.rfile.read(content_len)
-                body_json = json.loads(body)
-                logging.info("http request : " + body_json)
+                body_json : Dict = json.loads(body)
+                logging.info("http request : " + json.dumps(body_json))
 
                 header_name = body_json["header"]["name"]
                 if header_name == "DiscoverAppliancesRequest":
