@@ -45,8 +45,8 @@ class TheShopClova:
         appliance = payload["appliance"]
         appliance_id = appliance["applianceId"]
 
-        action = self.devices[appliance_id].action(body)
-        return json.dumps(action())
+        ret = self.devices[appliance_id].action(body)
+        return json.dumps(ret)
 
     def add_devices(self, devices: List[Device]):
         for device in devices:
