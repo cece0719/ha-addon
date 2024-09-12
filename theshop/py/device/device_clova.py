@@ -4,9 +4,6 @@ from abc import *
 from typing import Dict
 
 from .device import Device
-from .device_elevator import DeviceElevator
-from .device_light import DeviceLight
-from .device_light_total import DeviceLightTotal
 
 class CallElevator(Device, metaclass=ABCMeta):
     @abstractmethod
