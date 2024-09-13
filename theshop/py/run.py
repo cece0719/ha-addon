@@ -27,8 +27,7 @@ if __name__ == "__main__":
     clova = TheShopClova(option)
 
     mqtt_publish: Callable[[DeviceMqtt, str, str], None] = mqtt.publish
-    serial_send: Callable[[bytes], None] = \
-        lambda command: serial.send(command)
+    serial_send: Callable[[bytes], None] = serial.send
 
     devices: List[Device] = [
         DeviceLight(1, "거실1", ["거실"], mqtt_publish, serial_send),
