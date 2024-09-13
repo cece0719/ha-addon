@@ -3,7 +3,6 @@ from typing import List, Dict, Callable
 from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 from .device_serial import DeviceSerial
-from .device import Device
 import logging
 
 
@@ -13,7 +12,7 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
             number: int,
             device_name: str,
             device_tags: List[str],
-            mqtt_publish: Callable[[Device, str, str], None],
+            mqtt_publish: Callable[[DeviceMqtt, str, str], None],
             serial_send: Callable[[bytes], None],
     ):
         self.number = number

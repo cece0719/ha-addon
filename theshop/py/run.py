@@ -1,20 +1,17 @@
 import json
 import logging
-import http.server
-import socketserver
 import sys
-from http import HTTPStatus
-
 from typing import List, Callable
+
 from device.device import Device
-from device.device_light import DeviceLight
-from device.device_light_total import DeviceLightTotal
 from device.device_elevator import DeviceElevator
 from device.device_gas import DeviceGas
+from device.device_light import DeviceLight
+from device.device_light_total import DeviceLightTotal
 from device.device_mqtt import DeviceMqtt
 from theshopclova import TheShopClova
-from theshopserial import TheShopSerial
 from theshopmqtt import TheShopMQTT
+from theshopserial import TheShopSerial
 
 logging.basicConfig(
     level=logging.DEBUG,

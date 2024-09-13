@@ -1,5 +1,5 @@
-from typing import List
 from abc import *
+from typing import List
 
 
 class Device(metaclass=ABCMeta):

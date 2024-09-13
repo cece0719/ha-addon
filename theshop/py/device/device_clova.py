@@ -1,9 +1,8 @@
-import logging
 from abc import *
-
 from typing import Dict
 
 from .device import Device
+
 
 class CallElevator(Device, metaclass=ABCMeta):
     @abstractmethod

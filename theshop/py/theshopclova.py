@@ -1,19 +1,13 @@
-import copy
 import http.server
-import json
-import datetime
-
-from http import HTTPStatus
-
 # import paho.mqtt.client as paho_mqtt
 import json
-import socketserver
 import logging
-
+import socketserver
+from http import HTTPStatus
 from typing import List, Dict
 
-from device.device_clova import DeviceClova
 from device.device import Device
+from device.device_clova import DeviceClova
 
 
 class TheShopClova:

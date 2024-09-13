@@ -1,5 +1,5 @@
-from typing import Dict, Callable
 from abc import *
+from typing import Dict
 
 from .device import Device
 

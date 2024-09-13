@@ -9,7 +9,7 @@ from .device import Device
 class DeviceLightTotal(DeviceMqtt, DeviceSerial, DeviceClova):
     def __init__(
             self,
-            mqtt_publish: Callable[[Device, str, str], None],
+            mqtt_publish: Callable[[DeviceMqtt, str, str], None],
             serial_send: Callable[[bytes], None],
     ):
         self.mqtt_publish = mqtt_publish
