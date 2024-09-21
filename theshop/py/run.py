@@ -12,15 +12,24 @@ from theshopclova import TheShopClova
 from theshopmqtt import TheShopMQTT
 from theshopserial import TheShopSerial
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s.%(msecs)03d %(levelname)-7s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
-
 if __name__ == "__main__":
-    logging.info("initialize serial...")
     option = json.load(open(sys.argv[1]))
+
+    if option["logLevel"] == "DEBUG":
+        log_level=logging.DEBUG
+    elif option["logLevel"] == "INFO":
+        log_level=logging.INFO
+    else:
+        log_level=logging.INFO
+
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s.%(msecs)03d %(levelname)-7s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
+    logging.info("initialize serial...")
+
     mqtt = TheShopMQTT(option)
     serial = TheShopSerial(option)
     clova = TheShopClova(option)

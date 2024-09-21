@@ -52,9 +52,8 @@ class TheShopMQTT:
         self.is_connect = False
 
     def on_message(self, mqtt, userdata, msg):
-        if self.option["logging"]["mqtt"]:
-            logging.info("get messaged {}".format(msg.topic))
-            logging.info("get payload {}".format(msg.payload.decode()))
+        logging.debug("get messaged {}".format(msg.topic))
+        logging.debug("get payload {}".format(msg.payload.decode()))
         topic: str = msg.topic
         topics = topic.split("/")
         device_id = topics[1]
