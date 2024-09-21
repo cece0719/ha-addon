@@ -47,11 +47,11 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x0e\x1f\x81'):
             if data[5 + self.number] == 1:
-                logging.info("light" + str(self.number) + "status on")
+                logging.debug("light" + str(self.number) + "status on")
                 self.mqtt_publish(self, "state", "ON")
                 self.status = True
             else:
-                logging.info("light" + str(self.number) + "status off")
+                logging.debug("light" + str(self.number) + "status off")
                 self.mqtt_publish(self, "state", "OFF")
                 self.status = False
 
