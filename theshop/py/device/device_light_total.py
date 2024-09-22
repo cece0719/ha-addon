@@ -3,7 +3,6 @@ from typing import List, Dict, Callable
 from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 from .device_serial import DeviceSerial
-from .device import Device
 
 
 class DeviceLightTotal(DeviceMqtt, DeviceSerial, DeviceClova):

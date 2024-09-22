@@ -77,4 +77,4 @@ class TheShopMQTT:
             logging.info("waiting MQTT connected ...")
             time.sleep(1)
 
-        logging.info("mqtt connect success!!")
+        logging.info("MQTT connect success!!")

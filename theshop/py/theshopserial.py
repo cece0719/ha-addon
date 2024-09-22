@@ -66,21 +66,21 @@ class TheShopSerial:
         command = b'\xf7' + command
         command = command + bytes_xor(command)
         command = command + bytes_sum(command)
-        logging.info("request command : " + command.hex(" "))
+        logging.info("append command : " + command.hex(" "))
         self.request_command.append(command)
 
     def start(self):
         def listen():
             while True:
                 data = self.read_raw()
-                logging.debug(data.hex(" "))
+                if self.option["logging"]["serial"]:
+                    logging.info(data.hex(" "))
                 for device in self.devices.values():
                     device.receive_serial(data)
 
                 if len(self.request_command) > 0 and data[3] == 129:
-                    logging.info("write command")
                     command = self.request_command.pop()
-                    logging.info("command : " + command.hex(" "))
+                    logging.info("write command  : " + command.hex(" "))
                     self._ser.write(command)
 
         threading.Thread(target=listen).start()
