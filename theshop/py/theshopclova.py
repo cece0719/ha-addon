@@ -54,7 +54,7 @@ class TheShopClova:
                 content_len = int(self.headers.get("Content-Length"))
                 body = self.rfile.read(content_len)
                 body_json : Dict = json.loads(body)
-                logging.info("http request : " + json.dumps(body_json))
+                logging.info("http request : {}".format(json.dumps(body_json)))
 
                 header_name = body_json["header"]["name"]
                 if header_name == "DiscoverAppliancesRequest":
@@ -62,7 +62,7 @@ class TheShopClova:
                 else:
                     response = clova.action(body_json)
 
-                logging.info("http response : " + response)
+                logging.info("http response : {}".format(response))
 
                 self.send_response(HTTPStatus.OK)
                 self.end_headers()

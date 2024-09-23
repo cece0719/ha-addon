@@ -3,12 +3,6 @@ from typing import Dict
 
 from .device import Device
 
-
-class CallElevator(Device, metaclass=ABCMeta):
-    @abstractmethod
-    def call_elevator(self):
-        pass
-
 class DeviceClova(Device, metaclass=ABCMeta):
     def get_discovered_appliance(self):
         return {

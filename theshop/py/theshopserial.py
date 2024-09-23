@@ -50,7 +50,7 @@ class TheShopSerial:
             header = self._ser.read(1)
             if header == b'\xf7':
                 break
-            logging.info("header is not f7 try again : " + str(header.hex()))
+            logging.info("header is not f7 try again : {}".format(str(header.hex())))
 
         device_id = self._ser.read(1)
         device_sub_id = self._ser.read(1)
@@ -66,7 +66,7 @@ class TheShopSerial:
         command = b'\xf7' + command
         command = command + bytes_xor(command)
         command = command + bytes_sum(command)
-        logging.info("append command : " + command.hex(" "))
+        logging.info("append command : {}".format(command.hex(" ")))
         self.request_command.append(command)
 
     def start(self):
@@ -79,7 +79,7 @@ class TheShopSerial:
 
                 if len(self.request_command) > 0 and data[3] == 129:
                     command = self.request_command.pop()
-                    logging.info("write command  : " + command.hex(" "))
+                    logging.info("write command  : {}".format(command.hex(" ")))
                     self._ser.write(command)
 
         threading.Thread(target=listen).start()

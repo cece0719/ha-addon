@@ -10,10 +10,7 @@ from device.device_mqtt import DeviceMqtt
 
 
 class TheShopMQTT:
-    def __init__(
-            self,
-            option
-    ):
+    def __init__(self, option):
         self.option = option
         self.devices: Dict[str, DeviceMqtt] = {}
 
@@ -74,7 +71,7 @@ class TheShopMQTT:
         self.mqtt.loop_start()
 
         while not self.is_connect:
-            logging.info("waiting MQTT connected ...")
+            logging.info("waiting MQTT connected")
             time.sleep(1)
 
         logging.info("MQTT connect success!!")
