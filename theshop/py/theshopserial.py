@@ -18,10 +18,7 @@ def bytes_sum(in_bytes):
 
 
 class TheShopSerial:
-    def __init__(
-            self,
-            option
-    ):
+    def __init__(self, option):
         self.option = option
         self.request_command = []
         self.devices: Dict[str, DeviceSerial] = {}

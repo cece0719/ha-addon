@@ -11,10 +11,7 @@ from device.device_clova import DeviceClova
 
 
 class TheShopClova:
-    def __init__(
-            self,
-            option
-    ):
+    def __init__(self, option):
         self.option = option
         self.devices: Dict[str, DeviceClova] = {}
         self.discoveredAppliances = []
@@ -49,11 +46,12 @@ class TheShopClova:
 
     def start(self):
         clova = self
+
         class Handler(http.server.SimpleHTTPRequestHandler):
             def do_POST(self):
                 content_len = int(self.headers.get("Content-Length"))
                 body = self.rfile.read(content_len)
-                body_json : Dict = json.loads(body)
+                body_json: Dict = json.loads(body)
                 logging.info("http request : {}".format(json.dumps(body_json)))
 
                 header_name = body_json["header"]["name"]
@@ -67,7 +65,7 @@ class TheShopClova:
                 self.send_response(HTTPStatus.OK)
                 self.end_headers()
                 self.wfile.write(response.encode("utf8"))
+
         logging.info("try http start")
         httpd = socketserver.TCPServer(('', 8001), Handler)
         httpd.serve_forever()
-
