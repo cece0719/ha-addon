@@ -47,8 +47,8 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x36\x1f\x81'):
             status = data[6] & (1<<(self.number-1)) != 0
-            setTemperature = data[13+self.number]
-            currentTemperature = data[17+self.number]
+            setTemperature = data[12+(self.number*2)]
+            currentTemperature = data[13+(self.number*2)]
             if status:
                 self.mqtt_publish(self, "state", "heat")
             else:
