@@ -46,16 +46,15 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x36\x1f\x81'):
-            if data[6] & (1<<(self.number-1)) != 0:
-                logging.debug("boiler{} status on".format(str(self.number)))
+            status = data[6] & (1<<(self.number-1)) != 0
+            setTemperature = data[13+self.number]
+            currentTemperature = data[17+self.number]
+            if status:
                 self.mqtt_publish(self, "state", "heat")
-                self.mqtt_publish(self, "set_temperature", "30")
-                self.mqtt_publish(self, "current_temperature", "29")
             else:
-                logging.debug("boiler{} status off".format(str(self.number)))
                 self.mqtt_publish(self, "state", "off")
-                self.mqtt_publish(self, "set_temperature", "28")
-                self.mqtt_publish(self, "current_temperature", "27")
+            self.mqtt_publish(self, "set_temperature", str(setTemperature))
+            self.mqtt_publish(self, "current_temperature", str(currentTemperature))
 
     @property
     def additional_payload(self) -> Dict[str, str]:
