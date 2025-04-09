@@ -10,12 +10,14 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
     def __init__(
             self,
             number: int,
+            sub_number: int,
             device_name: str,
             device_tags: List[str],
             mqtt_publish: Callable[[DeviceMqtt, str, str], None],
             serial_send: Callable[[bytes], None],
     ):
         self.number = number
+        self.sub_number = sub_number
         self.__device_name = device_name
         self.__device_tags = device_tags
         self.status = False
@@ -24,7 +26,7 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
 
     @property
     def device_id(self) -> str:
-        return "light_{}".format(self.number)
+        return "light_{}_{}".format(self.number, self.sub_number)
 
     @property
     def device_name(self) -> str:
@@ -39,14 +41,14 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
         return "light"
 
     def turn_on(self):
-        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x01')
+        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41' + self.sub_number.to_bytes(1, "big") + b'\x01')
 
     def turn_off(self):
-        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41\x01\x00')
+        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41' + self.sub_number.to_bytes(1, "big") + b'\x00')
 
     def receive_serial(self, data: bytes):
-        if data.startswith(b'\xf7\x0e\x1f\x81'):
-            if data[5 + self.number] == 1:
+        if data.startswith(b'\xf7\x0e' + (self.number + 16).to_bytes(1, "big") + b'\x81'):
+            if data[5 + self.sub_number] == 1:
                 logging.debug("light{} status on".format(str(self.number)))
                 self.mqtt_publish(self, "state", "ON")
                 self.status = True
