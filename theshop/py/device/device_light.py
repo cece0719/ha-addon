@@ -41,10 +41,10 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
         return "light"
 
     def turn_on(self):
-        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41' + self.sub_number.to_bytes(1, "big") + b'\x01')
+        self.serial_send(b'\x0E' + ((16 * self.number) + self.sub_number).to_bytes(1, "big") + b'\x41\x01\x01')
 
     def turn_off(self):
-        self.serial_send(b'\x0E' + (self.number + 16).to_bytes(1, "big") + b'\x41' + self.sub_number.to_bytes(1, "big") + b'\x00')
+        self.serial_send(b'\x0E' + ((16 * self.number) + self.sub_number).to_bytes(1, "big") + b'\x41\x01\x00')
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x0e' + (self.number + 16).to_bytes(1, "big") + b'\x81'):
