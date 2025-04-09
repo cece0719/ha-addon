@@ -48,10 +48,10 @@ if __name__ == "__main__":
         DeviceElevator(serial.send),
     ]
 
-    mqtt.add_devices(devices)
+    # mqtt.add_devices(devices)
     serial.add_devices(devices)
     clova.add_devices(devices)
 
-    mqtt.start()
+    # mqtt.start()
     serial.start()
     clova.start()
