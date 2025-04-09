@@ -36,13 +36,13 @@ if __name__ == "__main__":
     clova = TheShopClova(option)
 
     devices: List[Device] = [
-        DeviceLight(1, 1, "거실1-1", ["거실"], mqtt.publish, serial.send),
-        DeviceLight(1, 2, "거실1-2", ["거실"], mqtt.publish, serial.send),
-        DeviceLight(1, 3, "거실1-3", ["거실"], mqtt.publish, serial.send),
-        DeviceLight(2, 1, "2", ["2"], mqtt.publish, serial.send),
-        DeviceLight(3, 1, "3", ["3"], mqtt.publish, serial.send),
-        DeviceLight(4, 1, "4", ["4"], mqtt.publish, serial.send),
-        DeviceLight(5, 1, "5", ["5"], mqtt.publish, serial.send),
+        DeviceLight(1, 1, "거실1", ["거실"], mqtt.publish, serial.send),
+        DeviceLight(1, 2, "거실2", ["거실"], mqtt.publish, serial.send),
+        DeviceLight(1, 3, "복도", ["복도"], mqtt.publish, serial.send),
+        DeviceLight(2, 1, "안방", ["안방"], mqtt.publish, serial.send),
+        DeviceLight(3, 1, "하온이방", ["하온이방","애들방"], mqtt.publish, serial.send),
+        DeviceLight(4, 1, "하빈이방", ["하빈이방", "애들방"], mqtt.publish, serial.send),
+        DeviceLight(5, 1, "알파룸", ["알파룸", "서재"], mqtt.publish, serial.send),
         DeviceBoiler(1, "거실", ["거실"], mqtt.publish, serial.send),
         DeviceBoiler(2, "안방", ["안방"], mqtt.publish, serial.send),
         DeviceBoiler(3, "컴퓨터방", ["컴퓨터방"], mqtt.publish, serial.send),
