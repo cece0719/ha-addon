@@ -67,7 +67,7 @@ class TheShopMQTT:
         self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_message(mqtt, userdata, msg))
         self.mqtt.username_pw_set("xxx", "xxx")
-        self.mqtt.connect("192.168.10.150")
+        self.mqtt.connect("192.168.68.63")
         self.mqtt.loop_start()
 
         while not self.is_connect:
