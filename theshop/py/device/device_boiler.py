@@ -77,5 +77,6 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
         elif topic == "set":
             self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (int(float(payload)) & 0xFF).to_bytes(1, 'big'))
             self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (int(float(payload)) & 0xFF).to_bytes(1, 'big'))
+            self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (int(float(payload)) & 0xFF).to_bytes(1, 'big'))
 
 
