@@ -19,7 +19,7 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
         self.__device_name = device_name
         self.__device_tags = device_tags
         self.set_temperature = 30
-        self.current_temperatrue = 15
+        self.current_temperature = 15
         self.mqtt_publish = mqtt_publish
         self.serial_send = serial_send
 
@@ -54,6 +54,8 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
                 self.mqtt_publish(self, "state", "heat")
             else:
                 self.mqtt_publish(self, "state", "off")
+            self.set_temperature = set_temperature
+            self.current_temperature = current_temperature
             self.mqtt_publish(self, "set_temperature", str(set_temperature))
             self.mqtt_publish(self, "current_temperature", str(current_temperature))
 
