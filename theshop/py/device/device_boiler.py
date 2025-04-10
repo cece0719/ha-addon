@@ -1,3 +1,4 @@
+from time import sleep
 from typing import List, Dict, Callable
 
 from .device_mqtt import DeviceMqtt
@@ -47,14 +48,14 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x36\x1f\x81'):
             status = data[6] & (1<<(self.number-1)) != 0
-            setTemperature = data[8+(self.number*2)]
-            currentTemperature = data[9+(self.number*2)]
+            set_temperature = data[8+(self.number*2)]
+            current_temperature = data[9+(self.number*2)]
             if status:
                 self.mqtt_publish(self, "state", "heat")
             else:
                 self.mqtt_publish(self, "state", "off")
-            self.mqtt_publish(self, "set_temperature", str(setTemperature))
-            self.mqtt_publish(self, "current_temperature", str(currentTemperature))
+            self.mqtt_publish(self, "set_temperature", str(set_temperature))
+            self.mqtt_publish(self, "current_temperature", str(current_temperature))
 
     @property
     def additional_payload(self) -> Dict[str, str]:
@@ -75,8 +76,9 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
             elif payload == "off":
                 self.turn_off()
         elif topic == "set":
-            self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (int(float(payload)) & 0xFF).to_bytes(1, 'big'))
-            self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (int(float(payload)) & 0xFF).to_bytes(1, 'big'))
-            self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (int(float(payload)) & 0xFF).to_bytes(1, 'big'))
-
-
+            while True:
+                set_temperature: int = int(float(payload))
+                self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (set_temperature & 0xFF).to_bytes(1, 'big'))
+                if set_temperature == self.set_temperature :
+                    break
+                sleep(0.3)
