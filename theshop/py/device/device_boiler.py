@@ -81,4 +81,5 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
                 self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (set_temperature & 0xFF).to_bytes(1, 'big'))
                 if set_temperature == self.set_temperature :
                     break
+                logging.info("temp : {}, {}".format(str(set_temperature), str(self.set_temperature)))
                 sleep(0.3)
