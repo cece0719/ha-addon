@@ -54,7 +54,7 @@ class TheShopSerial:
         self._ser.reset_output_buffer()
 
         self.exclude_list = [one.split("#")[0] for one in str(option["excludeList"]).split(";")]
-        self.include_list = [one.split("#")[0] for one in str(option["excludeList"]).split(";")]
+        self.include_list = [one.split("#")[0] for one in str(option["includeList"]).split(";")]
 
     def add_devices(self, devices: List[Device]):
         for device in devices:
