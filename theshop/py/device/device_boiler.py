@@ -18,6 +18,7 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
         self.number = number
         self.__device_name = device_name
         self.__device_tags = device_tags
+        self.status = True
         self.set_temperature = 30
         self.current_temperature = 15
         self.mqtt_publish = mqtt_publish
@@ -40,10 +41,19 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
         return "climate"
 
     def turn_on(self):
-        self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x43\x01\x01')
+        while True:
+            self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x43\x01\x01')
+            if self.status :
+                break
+            sleep(0.3)
+
 
     def turn_off(self):
-        self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x43\x01\x00')
+        while True:
+            self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x43\x01\x00')
+            if self.status :
+                break
+            sleep(0.3)
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x36\x1f\x81'):
@@ -54,6 +64,7 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
                 self.mqtt_publish(self, "state", "heat")
             else:
                 self.mqtt_publish(self, "state", "off")
+            self.status = status
             self.set_temperature = set_temperature
             self.current_temperature = current_temperature
             self.mqtt_publish(self, "set_temperature", str(set_temperature))
