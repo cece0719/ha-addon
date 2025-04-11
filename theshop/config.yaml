@@ -1,5 +1,5 @@
 name: cece0719 the shop
-version: 1.2.38
+version: 1.2.39
 slug: wallpad
 description: 테스트
 arch:
@@ -19,6 +19,7 @@ uart: true
 options:
 #  type: serial
   logLevel: INFO
+  includeList: nothing
   excludeList: nothing
 #  serial:
 #    port: "/dev/ttyUSB0"
@@ -30,6 +31,7 @@ options:
 schema:
 #  type: list(serial|socket)
   logLevel: list(DEBUG|INFO)
+  includeList: str
   excludeList: str
 #  serial:
 #    port: str?

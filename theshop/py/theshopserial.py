@@ -21,6 +21,10 @@ def bytes_sum(in_bytes):
 
 def logging_if_need(self, data):
     data_hex = data.hex(" ")
+    for include in self.include_list:
+        if data_hex.startswith(include):
+            logging.info(data_hex)
+            return
     for exclude in self.exclude_list:
         if data_hex.startswith(exclude):
             return
@@ -50,6 +54,7 @@ class TheShopSerial:
         self._ser.reset_output_buffer()
 
         self.exclude_list = [one.split("#")[0] for one in str(option["excludeList"]).split(";")]
+        self.include_list = [one.split("#")[0] for one in str(option["excludeList"]).split(";")]
 
     def add_devices(self, devices: List[Device]):
         for device in devices:
