@@ -1,5 +1,5 @@
 name: cece0719 the shop
-version: 1.2.40
+version: 1.2.41
 slug: wallpad
 description: 테스트
 arch:
@@ -20,7 +20,7 @@ options:
 #  type: serial
   logLevel: INFO
   includeList: nothing
-  excludeList: nothing
+  excludeList: f7 0e#조명;f7 12#가스;f7 30#검침;f7 33#일괄소등;f7 36#난방;f7 39#POWEROUTLET?;f7 40#문열기관련;f7 60#이거뭐지
 #  serial:
 #    port: "/dev/ttyUSB0"
 #  socket:
