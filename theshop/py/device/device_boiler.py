@@ -43,7 +43,7 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
     def turn_on(self):
         while True:
             self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x43\x01\x01')
-            if self.status :
+            if self.status:
                 break
             sleep(0.3)
 
@@ -51,7 +51,7 @@ class DeviceBoiler(DeviceMqtt, DeviceSerial):
     def turn_off(self):
         while True:
             self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x43\x01\x00')
-            if self.status :
+            if not self.status:
                 break
             sleep(0.3)
 
