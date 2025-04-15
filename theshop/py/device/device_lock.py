@@ -30,12 +30,21 @@ class DeviceLock(DeviceMqtt, DeviceClova):
     def additional_payload(self) -> Dict[str, str]:
         return {
             "command_topic": "~/command",
+            "state_topic": "~/state",
+            "payload_lock": "LOCK",
+            "payload_unlock": "UNLOCK",
+            "state_locked": "LOCK",
+            "state_unlocked": "UNLOCK"
         }
 
     def receive_topic(self, topic: str, payload: str):
         if topic == "command":
             if payload == "UNLOCK":
                 self.open()
+
+    def receive_serial(self, data: bytes):
+        if data.startswith(b'\xf7\x40\x03\x01\x00'):
+            self.mqtt_publish(self, "state", "LOCK")
 
     @property
     def mqtt_device_type(self) -> str:
