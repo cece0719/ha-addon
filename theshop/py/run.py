@@ -9,6 +9,7 @@ from device.device_gas import DeviceGas
 from device.device_light import DeviceLight
 from device.device_boiler import DeviceBoiler
 from device.device_light_total import DeviceLightTotal
+from device.device_lock import DeviceLock
 from theshopclova import TheShopClova
 from theshopmqtt import TheShopMQTT
 from theshopserial import TheShopSerial
@@ -51,6 +52,7 @@ if __name__ == "__main__":
         DeviceLightTotal(mqtt.publish, serial.send),
         DeviceGas(mqtt.publish, serial.send),
         DeviceElevator(serial.send),
+        DeviceLock(serial.send),
     ]
 
     mqtt.add_devices(devices)

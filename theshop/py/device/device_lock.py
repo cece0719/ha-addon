@@ -4,7 +4,7 @@ from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 
 
-class DeviceElevator(DeviceMqtt, DeviceClova):
+class DeviceLock(DeviceMqtt, DeviceClova):
     def __init__(
             self,
             serial_send: Callable[[bytes], None],
