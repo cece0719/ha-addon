@@ -24,7 +24,7 @@ class DeviceLock(DeviceMqtt, DeviceClova):
         return ["문"]
 
     def open(self):
-        self.serial_send(b'\x40\x03\x22\x00\x96\xF2')
+        self.serial_send(b'\x40\x03\x22\x00')
 
     @property
     def additional_payload(self) -> Dict[str, str]:
