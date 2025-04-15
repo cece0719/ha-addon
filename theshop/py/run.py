@@ -52,7 +52,7 @@ if __name__ == "__main__":
         DeviceLightTotal(mqtt.publish, serial.send),
         DeviceGas(mqtt.publish, serial.send),
         DeviceElevator(serial.send),
-        DeviceLock(serial.send),
+        DeviceLock(mqtt.publish, serial.send),
     ]
 
     mqtt.add_devices(devices)

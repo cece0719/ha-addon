@@ -7,8 +7,10 @@ from .device_mqtt import DeviceMqtt
 class DeviceLock(DeviceMqtt, DeviceClova):
     def __init__(
             self,
+            mqtt_publish: Callable[[DeviceMqtt, str, str], None],
             serial_send: Callable[[bytes], None],
     ):
+        self.mqtt_publish = mqtt_publish
         self.serial_send = serial_send
 
     @property
