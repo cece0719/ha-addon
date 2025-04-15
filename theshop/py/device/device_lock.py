@@ -1,3 +1,4 @@
+import logging
 from typing import List, Dict, Callable
 
 from .device_clova import DeviceClova
@@ -46,6 +47,7 @@ class DeviceLock(DeviceMqtt, DeviceClova):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x40\x03\x01\x00'):
+            logging.info("abc88")
             self.mqtt_publish(self, "state", "LOCK")
 
     @property
