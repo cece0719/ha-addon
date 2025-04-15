@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 from typing import List, Dict, Callable
 
 from .device_clova import DeviceClova
@@ -28,7 +29,11 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
         return ["문"]
 
     def open(self):
-        self.serial_send(b'\x40\x03\x22\x00')
+        self.serial_send(b'\x40\x02\x12\x00')#통화
+        sleep(1)
+        self.serial_send(b'\x40\x02\x22\x00')#문열기
+        # sleep(1)
+        # self.serial_send(b'\x40\x02\x22\x00')#취소
 
     @property
     def additional_payload(self) -> Dict[str, str]:
