@@ -30,7 +30,12 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
 
     def open(self):
         self.serial_send(b'\x40\x02\x12\x00')#통화
+        sleep(0.15)
+        self.serial_send(b'\x40\x02\x12\x00')#통화
+        sleep(0.15)
+        self.serial_send(b'\x40\x02\x12\x00')#통화
         sleep(1)
+
         self.serial_send(b'\x40\x02\x22\x00')#문열기
         # sleep(1)
         # self.serial_send(b'\x40\x02\x22\x00')#취소
