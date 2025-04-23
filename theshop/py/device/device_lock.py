@@ -22,7 +22,7 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
 
     @property
     def device_name(self) -> str:
-        return "문"
+        return "현관문"
 
     @property
     def device_tags(self) -> List[str]:
@@ -66,36 +66,21 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
 
     @property
     def appliance_types(self) -> list[str]:
-        return ["SMARTLOCK"]
+        return ["SMARTCURTAIN"] #클로바에서 SMARTLOCK타입은 잠그는 명령만 됨 OPEN명령어 되는놈으로 설정
 
     @property
     def clova_actions(self) -> list[str]:
-        return ["SetLockState", "GetLockState"]
+        return ["Open"]
 
     def action(self, body) -> Dict:
-        if body["header"]["name"] == "SetLockStateRequest":
+        if body["header"]["name"] == "OpenRequest":
             self.open()
-            ret = {
-                "header": body["header"],
-                "payload": {
-                    "lockState": body["payload"]["lockState"]
-                }
-            }
-            ret["header"]["name"] = "SetLockStateConfirmation"
-            return ret
-        if body["header"]["name"] == "GetLockStateRequest":
-            ret = {
-                "header": body["header"],
-                "payload": {
-                    "lockState": "LOCKED"
-                }
-            }
-            ret["header"]["name"] = "GetLockStateResponse"
-            return ret
         ret = {
             "header": body["header"],
             "payload": {}
         }
+        ret["header"]["name"] = "OpenConfirmation"
         return ret
+
 
 
