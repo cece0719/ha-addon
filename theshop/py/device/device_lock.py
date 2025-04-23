@@ -70,16 +70,32 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
 
     @property
     def clova_actions(self) -> list[str]:
-        return ["SetLockState"]
+        return ["SetLockState", "GetLockState"]
 
     def action(self, body) -> Dict:
-        if body["header"]["name"] == "SetLockStateRequest" and body["payload"]["lockState"] == "UNLOCKED":
+        if body["header"]["name"] == "SetLockStateRequest":
             self.open()
+            ret = {
+                "header": body["header"],
+                "payload": {
+                    "lockState": body["payload"]["lockState"]
+                }
+            }
+            ret["header"]["name"] = "SetLockStateConfirmation"
+            return ret
+        if body["header"]["name"] == "GetLockStateRequest":
+            ret = {
+                "header": body["header"],
+                "payload": {
+                    "lockState": "LOCKED"
+                }
+            }
+            ret["header"]["name"] = "GetLockStateResponse"
+            return ret
         ret = {
             "header": body["header"],
-            "payload": {
-                "lockState": body["payload"]["lockState"]
-            }
+            "payload": {}
         }
-        ret["header"]["name"] = "SetLockStateConfirmation"
         return ret
+
+
