@@ -26,7 +26,7 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
 
     @property
     def device_tags(self) -> List[str]:
-        return ["문"]
+        return ["현관문", "문"]
 
     def open(self):
         self.serial_send(b'\x40\x02\x12\x00')#통화

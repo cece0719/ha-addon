@@ -48,6 +48,11 @@ class DeviceLight(DeviceMqtt, DeviceSerial, DeviceClova):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x0e' + (self.number + 16).to_bytes(1, "big") + b'\x81'):
+
+            #가끔 잘못된 데이터 들어오는 걸로 보여 추가
+            if len(data) < (5 + self.sub_number):
+                return
+
             if data[5 + self.sub_number] == 1:
                 logging.debug("light{} status on".format(str(self.number)))
                 self.mqtt_publish(self, "state", "ON")
