@@ -6,7 +6,7 @@ from .device_serial import DeviceSerial
 import logging
 
 
-class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
+class DeviceElectricityAll(DeviceMqtt, DeviceSerial):
     def __init__(
             self,
             mqtt_publish: Callable[[DeviceMqtt, str, str], None],

@@ -11,6 +11,7 @@ from device.device_boiler import DeviceBoiler
 from device.device_light_total import DeviceLightTotal
 from device.device_lock import DeviceLock
 from device.device_electricity_current import DeviceElectricityCurrent
+from device.device_electricity_all import DeviceElectricityAll
 from theshopclova import TheShopClova
 from theshopmqtt import TheShopMQTT
 from theshopserial import TheShopSerial
@@ -55,6 +56,7 @@ if __name__ == "__main__":
         DeviceElevator(serial.send),
         DeviceLock(mqtt.publish, serial.send),
         DeviceElectricityCurrent(mqtt.publish, serial.send),
+        DeviceElectricityAll(mqtt.publish, serial.send),
     ]
 
     mqtt.add_devices(devices)
