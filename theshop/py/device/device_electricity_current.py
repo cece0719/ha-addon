@@ -14,6 +14,7 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
     ):
         self.mqtt_publish = mqtt_publish
         self.serial_send = serial_send
+        self.electricity_current = 0
 
     @property
     def device_id(self) -> str:
@@ -49,30 +50,21 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x60\x01\x01\x03'):
-            logging.info("aa")
-            electricity_current = self.bytes_to_int(data[5:8])
-            logging.info(str(electricity_current))
-            self.mqtt_publish(self, "command-topic", str(electricity_current))
+            self.electricity_current = self.bytes_to_int(data[5:8])
+            self.mqtt_publish(self, "state-topic", str(self.electricity_current))
 
     @property
     def additional_payload(self) -> Dict[str, str]:
         return {
             "command_topic": "~/command-topic",
+            "state_topic": "~/state-topic",
             "optimistic": True
         }
 
     def receive_topic(self, topic: str, payload: str):
         return
-        # if topic == "command":
+        # if topic == "state-topic":
         #     if payload == "heat":
         #         self.turn_on()
         #     elif payload == "off":
         #         self.turn_off()
-        # elif topic == "set":
-        #     while True:
-        #         set_temperature: int = int(float(payload))
-        #         self.serial_send(b'\x36' + (self.number + 16).to_bytes(1, "big") + b'\x44\x01' + (set_temperature & 0xFF).to_bytes(1, 'big'))
-        #         if set_temperature == self.set_temperature :
-        #             break
-        #         logging.info("temp : {}, {}".format(str(set_temperature), str(self.set_temperature)))
-        #         sleep(0.3)
