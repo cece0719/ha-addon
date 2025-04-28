@@ -50,7 +50,7 @@ class DeviceElectricityAll(DeviceMqtt, DeviceSerial):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x30\x03\x81\x08'):
-            self.electricity_current = self.bytes_to_int(data[9:13])
+            self.electricity_current = (self.bytes_to_int(data[9:13])/10)
             self.mqtt_publish(self, "state", self.electricity_current)
 
     @property
