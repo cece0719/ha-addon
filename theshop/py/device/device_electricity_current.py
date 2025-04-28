@@ -18,11 +18,11 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
 
     @property
     def device_id(self) -> str:
-        return "electricity_current"
+        return "electricity_now"
 
     @property
     def device_name(self) -> str:
-        return "electricity_current"
+        return "electricity_now"
 
     @property
     def device_tags(self) -> List[str]:
