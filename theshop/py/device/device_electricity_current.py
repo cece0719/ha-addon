@@ -58,6 +58,7 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
     def additional_payload(self) -> Dict[str, str]:
         return {
             "command_topic": "~/command-topic",
+            "optimistic": True
         }
 
     def receive_topic(self, topic: str, payload: str):
