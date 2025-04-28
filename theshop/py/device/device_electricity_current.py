@@ -36,7 +36,7 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
         nibbles = []
         for byte in bytes:
             high = (byte >> 4) & 0x0F  # 상위 4비트
-            low = byte & 0x0F          # 하위 4비트
+            low = byte & 0x0F  # 하위 4비트
             nibbles.append(high)
             nibbles.append(low)
 
@@ -49,7 +49,9 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x60\x01\x01\x03'):
+            logging.info("aa")
             electricity_current = self.bytes_to_int(data[5:7])
+            logging.info(str(electricity_current))
             self.mqtt_publish(self, "set", str(electricity_current))
 
     @property
