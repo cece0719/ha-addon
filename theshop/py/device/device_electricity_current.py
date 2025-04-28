@@ -30,7 +30,7 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
 
     @property
     def mqtt_device_type(self) -> str:
-        return "text"
+        return "sensor"
 
     def bytes_to_int(self, bytes):
         # 먼저, 바이트들을 하나씩 4비트 단위로 쪼갠다
@@ -51,13 +51,12 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x60\x01\x01\x03'):
             self.electricity_current = self.bytes_to_int(data[5:8])
-            self.mqtt_publish(self, "state-topic", str(self.electricity_current) + "W")
+            self.mqtt_publish(self, "state", str(self.electricity_current) + "W")
 
     @property
     def additional_payload(self) -> Dict[str, str]:
         return {
-            "command_topic": "~/command-topic",
-            "state_topic": "~/state-topic",
+            "state_topic": "~/state",
             "optimistic": True
         }
 
