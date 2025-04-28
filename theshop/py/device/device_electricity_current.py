@@ -50,14 +50,14 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x60\x01\x01\x03'):
             logging.info("aa")
-            electricity_current = self.bytes_to_int(data[5:7])
+            electricity_current = self.bytes_to_int(data[5:8])
             logging.info(str(electricity_current))
-            self.mqtt_publish(self, "set", str(electricity_current))
+            self.mqtt_publish(self, "command-topic", str(electricity_current))
 
     @property
     def additional_payload(self) -> Dict[str, str]:
         return {
-            "command_topic": "~/set",
+            "command_topic": "~/command-topic",
         }
 
     def receive_topic(self, topic: str, payload: str):
