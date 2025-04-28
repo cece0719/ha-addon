@@ -51,7 +51,7 @@ class DeviceElectricityCurrent(DeviceMqtt, DeviceSerial):
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x60\x01\x01\x03'):
             self.electricity_current = self.bytes_to_int(data[5:8])
-            self.mqtt_publish(self, "state-topic", str(self.electricity_current))
+            self.mqtt_publish(self, "state-topic", str(self.electricity_current) + "W")
 
     @property
     def additional_payload(self) -> Dict[str, str]:
