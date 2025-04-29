@@ -22,7 +22,7 @@ def bytes_sum(in_bytes):
 def logging_if_need(self, data):
     data_hex = data.hex(" ")
     for include in self.include_list:
-        if data_hex.startswith(include):
+        if data_hex.startswith(include) or include == "*":
             logging.info(data_hex)
             return
     for exclude in self.exclude_list:
