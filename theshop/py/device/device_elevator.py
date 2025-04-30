@@ -2,13 +2,16 @@ from typing import List, Dict, Callable
 
 from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
+from .device_light_total import DeviceLightTotal
 
 
 class DeviceElevator(DeviceMqtt, DeviceClova):
     def __init__(
             self,
+            device_light_total: DeviceLightTotal,
             serial_send: Callable[[bytes], None],
     ):
+        self.device_light_total = device_light_total
         self.serial_send = serial_send
 
     @property
@@ -24,7 +27,10 @@ class DeviceElevator(DeviceMqtt, DeviceClova):
         return []
 
     def call_elevator(self):
-        self.serial_send(b'\x33\x01\x81\x03\x00\x20\x00')
+        if self.device_light_total.status :
+            self.serial_send(b'\x33\x01\x81\x03\x00\x20\x00')
+        else :
+            self.serial_send(b'\x33\x01\x81\x03\x00\x24\x00')
 
     @property
     def additional_payload(self) -> Dict[str, str]:

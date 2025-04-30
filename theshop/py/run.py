@@ -38,6 +38,8 @@ if __name__ == "__main__":
     serial = TheShopSerial(option)
     clova = TheShopClova(option)
 
+    deviceLightTotal = DeviceLightTotal(mqtt.publish, serial.send)
+
     devices: List[Device] = [
         DeviceLight(1, 1, "거실1", ["거실"], mqtt.publish, serial.send),
         DeviceLight(1, 2, "거실2", ["거실"], mqtt.publish, serial.send),
@@ -51,9 +53,9 @@ if __name__ == "__main__":
         DeviceBoiler(3, "하온이방", ["하온이방"], mqtt.publish, serial.send),
         DeviceBoiler(4, "하빈이방", ["하빈이방"], mqtt.publish, serial.send),
         DeviceBoiler(5, "알파룸", ["알파룸"], mqtt.publish, serial.send),
-        DeviceLightTotal(mqtt.publish, serial.send),
         DeviceGas(mqtt.publish, serial.send),
-        DeviceElevator(serial.send),
+        deviceLightTotal,
+        DeviceElevator(deviceLightTotal, serial.send),
         DeviceLock(mqtt.publish, serial.send),
         DeviceElectricityCurrent(mqtt.publish, serial.send),
         DeviceElectricityAll(mqtt.publish, serial.send),
