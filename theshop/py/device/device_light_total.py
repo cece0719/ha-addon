@@ -39,7 +39,11 @@ class DeviceLightTotal(DeviceMqtt, DeviceSerial, DeviceClova):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x33\x01\x81'):
-            self.status = (data[6] != 4)
+            if data[6] == 4:
+                self.status = True
+            if data[6] == 0:
+                self.status = False
+
             if self.status:
                 self.mqtt_publish(self, "state", "ON")
             else:
