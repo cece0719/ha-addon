@@ -67,7 +67,20 @@ class TheShopMQTT:
         self.mqtt.on_disconnect = (lambda mqtt, userdata, rc: self.on_disconnect(mqtt, userdata, rc))
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_message(mqtt, userdata, msg))
         self.mqtt.username_pw_set("xxx", "xxx")
-        self.mqtt.connect("192.168.68.63")
+        
+        # MQTT 연결 재시도 (1분간)
+        max_attempts = 12  # 5초 * 12 = 60초
+        for attempt in range(max_attempts):
+            try:
+                self.mqtt.connect("192.168.68.63")
+                break
+            except Exception as e:
+                if attempt < max_attempts - 1:
+                    logging.info(f"MQTT 연결 대기 중... ({attempt + 1}/{max_attempts}) - {e}")
+                    time.sleep(5)
+                else:
+                    logging.error(f"MQTT 연결 실패: {e}")
+                    raise
         self.mqtt.loop_start()
 
         while not self.is_connect:
