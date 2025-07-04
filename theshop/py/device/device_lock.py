@@ -2,12 +2,11 @@ import logging
 from time import sleep
 from typing import List, Dict, Callable
 
-from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 from .device_serial import DeviceSerial
 
 
-class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
+class DeviceLock(DeviceMqtt, DeviceSerial):
     def __init__(
             self,
             mqtt_publish: Callable[[DeviceMqtt, str, str], None],
@@ -64,23 +63,7 @@ class DeviceLock(DeviceMqtt, DeviceSerial, DeviceClova):
     def mqtt_device_type(self) -> str:
         return "lock"
 
-    @property
-    def appliance_types(self) -> list[str]:
-        return ["SMARTCURTAIN"] #클로바에서 SMARTLOCK타입은 잠그는 명령만 됨 OPEN명령어 되는놈으로 설정
 
-    @property
-    def clova_actions(self) -> list[str]:
-        return ["Open"]
-
-    def action(self, body) -> Dict:
-        if body["header"]["name"] == "OpenRequest":
-            self.open()
-        ret = {
-            "header": body["header"],
-            "payload": {}
-        }
-        ret["header"]["name"] = "OpenConfirmation"
-        return ret
 
 
 

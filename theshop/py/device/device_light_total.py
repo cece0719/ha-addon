@@ -1,11 +1,10 @@
 from typing import List, Dict, Callable
 
-from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 from .device_serial import DeviceSerial
 
 
-class DeviceLightTotal(DeviceMqtt, DeviceSerial, DeviceClova):
+class DeviceLightTotal(DeviceMqtt, DeviceSerial):
     def __init__(
             self,
             mqtt_publish: Callable[[DeviceMqtt, str, str], None],
@@ -65,25 +64,3 @@ class DeviceLightTotal(DeviceMqtt, DeviceSerial, DeviceClova):
             elif payload == "OFF":
                 self.turn_off()
 
-    @property
-    def appliance_types(self) -> list[str]:
-        return ["LIGHT"]
-
-    @property
-    def clova_actions(self) -> list[str]:
-        return ["TurnOn", "TurnOff"]
-
-    def action(self, body) -> Dict:
-        ret = {
-            "header": body["header"],
-            "payload": {}
-        }
-
-        if body["header"]["name"] == "TurnOnRequest":
-            self.turn_on()
-            ret["header"]["name"] = "TurnOnConfirmation"
-        elif body["header"]["name"] == "TurnOffRequest":
-            self.turn_off()
-            ret["header"]["name"] = "TurnOffConfirmation"
-
-        return ret

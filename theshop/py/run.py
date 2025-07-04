@@ -12,7 +12,7 @@ from device.device_light_total import DeviceLightTotal
 from device.device_lock import DeviceLock
 from device.device_electricity_current import DeviceElectricityCurrent
 from device.device_electricity_all import DeviceElectricityAll
-from theshopclova import TheShopClova
+
 from theshopmqtt import TheShopMQTT
 from theshopserial import TheShopSerial
 
@@ -36,7 +36,6 @@ if __name__ == "__main__":
 
     mqtt = TheShopMQTT(option)
     serial = TheShopSerial(option)
-    clova = TheShopClova(option)
 
     deviceLightTotal = DeviceLightTotal(mqtt.publish, serial.send)
 
@@ -63,8 +62,14 @@ if __name__ == "__main__":
 
     mqtt.add_devices(devices)
     serial.add_devices(devices)
-    clova.add_devices(devices)
 
     mqtt.start()
     serial.start()
-    clova.start()
+    
+    # 메인 스레드가 종료되지 않도록 대기
+    try:
+        while True:
+            import time
+            time.sleep(1)
+    except KeyboardInterrupt:
+        logging.info("애드온 종료 중...")

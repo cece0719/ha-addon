@@ -1,11 +1,10 @@
 from typing import List, Dict, Callable
 
-from .device_clova import DeviceClova
 from .device_mqtt import DeviceMqtt
 from .device_light_total import DeviceLightTotal
 
 
-class DeviceElevator(DeviceMqtt, DeviceClova):
+class DeviceElevator(DeviceMqtt):
     def __init__(
             self,
             device_light_total: DeviceLightTotal,
@@ -47,19 +46,4 @@ class DeviceElevator(DeviceMqtt, DeviceClova):
     def mqtt_device_type(self) -> str:
         return "button"
 
-    @property
-    def appliance_types(self) -> list[str]:
-        return ["BUILDING_ELEVATOR_CALLER"]
 
-    @property
-    def clova_actions(self) -> list[str]:
-        return ["CallElevator"]
-
-    def action(self, body) -> Dict:
-        self.call_elevator()
-        ret = {
-            "header": body["header"],
-            "payload": {}
-        }
-        ret["header"]["name"] = "CallElevatorConfirmation"
-        return ret
