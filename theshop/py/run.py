@@ -12,6 +12,7 @@ from device.device_light_total import DeviceLightTotal
 from device.device_lock import DeviceLock
 from device.device_electricity_current import DeviceElectricityCurrent
 from device.device_electricity_all import DeviceElectricityAll
+from device.device_electricity_room import DeviceElectricityRoom
 
 from theshopmqtt import TheShopMQTT
 from theshopserial import TheShopSerial
@@ -58,6 +59,13 @@ if __name__ == "__main__":
         DeviceLock(mqtt.publish, serial.send),
         DeviceElectricityCurrent(mqtt.publish, serial.send),
         DeviceElectricityAll(mqtt.publish, serial.send),
+        # 방별 전력량 센서들
+        DeviceElectricityRoom(1, "1번", ["1번"], mqtt.publish, serial.send),
+        DeviceElectricityRoom(2, "2번", ["2번"], mqtt.publish, serial.send),
+        DeviceElectricityRoom(3, "3번", ["3번"], mqtt.publish, serial.send),
+        DeviceElectricityRoom(4, "4번", ["4번"], mqtt.publish, serial.send),
+        DeviceElectricityRoom(5, "5번", ["5번"], mqtt.publish, serial.send),
+        DeviceElectricityRoom(9, "6번", ["6번"], mqtt.publish, serial.send),
     ]
 
     mqtt.add_devices(devices)
