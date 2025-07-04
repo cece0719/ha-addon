@@ -55,6 +55,7 @@ class DeviceElectricityRoom(DeviceMqtt, DeviceSerial):
 
     def receive_serial(self, data: bytes):
         if data.startswith(b'\xf7\x39' + (self.number*16 + 15).to_bytes(1, "big") + b'\x81'):
+            logging.info(data.hex(" "))
             self.electricity_current = self.bytes_to_int(data[6:13])
             self.mqtt_publish(self, "state", self.electricity_current)
 
