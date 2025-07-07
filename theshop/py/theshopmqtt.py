@@ -45,8 +45,24 @@ class TheShopMQTT:
         logging.info("mqtt on connect success")
 
     def on_disconnect(self, mqtt, userdata, rc):
-        logging.info("mqtt disconnected!!")
+        logging.warning(f"MQTT 연결이 끊어졌습니다! (코드: {rc})")
         self.is_connect = False
+        
+        # 자동 재연결 시도
+        if rc != 0:
+            logging.info("MQTT 자동 재연결을 시도합니다...")
+            try:
+                self.mqtt.reconnect()
+                logging.info("MQTT 재연결 성공!")
+            except Exception as e:
+                logging.error(f"MQTT 재연결 실패: {e}")
+                # 재연결 실패시 5초 후 다시 시도
+                time.sleep(5)
+                try:
+                    self.mqtt.reconnect()
+                    logging.info("MQTT 재연결 재시도 성공!")
+                except Exception as e2:
+                    logging.error(f"MQTT 재연결 재시도 실패: {e2}")
 
     def on_message(self, mqtt, userdata, msg):
         logging.debug("get messaged {}".format(msg.topic))
@@ -68,19 +84,19 @@ class TheShopMQTT:
         self.mqtt.on_message = (lambda mqtt, userdata, msg: self.on_message(mqtt, userdata, msg))
         self.mqtt.username_pw_set("xxx", "xxx")
         
-        # MQTT 연결 재시도 (1분간)
-        max_attempts = 12  # 5초 * 12 = 60초
-        for attempt in range(max_attempts):
+        # MQTT 연결 무한 재시도
+        attempt = 0
+        while True:
             try:
                 self.mqtt.connect("192.168.68.63")
+                logging.info(f"MQTT 연결 성공! (시도 횟수: {attempt + 1})")
                 break
             except Exception as e:
-                if attempt < max_attempts - 1:
-                    logging.info(f"MQTT 연결 대기 중... ({attempt + 1}/{max_attempts}) - {e}")
-                    time.sleep(5)
-                else:
-                    logging.error(f"MQTT 연결 실패: {e}")
-                    raise
+                attempt += 1
+                logging.warning(f"MQTT 연결 실패 (시도 횟수: {attempt}) - {e}")
+                logging.info("5초 후 재시도...")
+                time.sleep(5)
+        
         self.mqtt.loop_start()
 
         while not self.is_connect:
